@@ -35,7 +35,7 @@ public class Holdem6CompareHandsMethod implements PokerGameCompareHandsMethod{
 
         List<Card> bestHand = null;
         
-        for(int i = tableCardsPos; i < 5; i++ ){
+        for(int i = tableCardsPos; i < round.getTableCards().size(); i++ ){
 
             hand.add(round.getTableCards().get(i));
             List<Card> currentHand = findBestHandRecursive(round, hand, i + 1);

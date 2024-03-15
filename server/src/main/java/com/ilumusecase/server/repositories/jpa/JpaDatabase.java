@@ -1,21 +1,29 @@
 package com.ilumusecase.server.repositories.jpa;
 
-import com.ilumusecase.server.repositories.ClientDatabaseInterface;
-import com.ilumusecase.server.repositories.DatabaseInterface;
-import com.ilumusecase.server.repositories.TableDatabaseInterface;
+import org.springframework.stereotype.Repository;
 
+import com.ilumusecase.server.repositories.interfaces.ClientDatabaseInterface;
+import com.ilumusecase.server.repositories.interfaces.DatabaseInterface;
+import com.ilumusecase.server.repositories.interfaces.TableDatabaseInterface;
+
+import lombok.Data;
+
+@Data
+@Repository
 public class JpaDatabase implements DatabaseInterface{
+
+    private ClientJpaRepository clientJpaRepository;
+    private TableJpaRepository tableJpaRepository;
+    
 
     @Override
     public ClientDatabaseInterface getClientDatabase() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getClientDatabase'");
+        return clientJpaRepository;    
     }
 
     @Override
     public TableDatabaseInterface getTableDatabase() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getTableDatabase'");
+        return tableJpaRepository;    
     }
     
 

@@ -1,4 +1,4 @@
-package com.ilumusecase.server.repositories;
+package com.ilumusecase.server.repositories.interfaces;
 
 public interface DatabaseInterface {
     

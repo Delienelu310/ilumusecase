@@ -2,7 +2,7 @@ package com.ilumusecase.server.controllers;
 
 import java.util.List;
 
-import com.ilumusecase.server.repositories.DatabaseInterface;
+import com.ilumusecase.server.repositories.interfaces.DatabaseInterface;
 import com.ilumusecase.server.resources.Table;
 
 import org.springframework.web.bind.annotation.DeleteMapping;

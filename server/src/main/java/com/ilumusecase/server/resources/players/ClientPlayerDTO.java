@@ -4,17 +4,12 @@ import com.ilumusecase.game.Player;
 import com.ilumusecase.server.resources.PlayerDTO;
 
 import jakarta.persistence.Entity;
-import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Data
 @NoArgsConstructor
-public class ClientPlayerDTO implements PlayerDTO{
-    
-    
-    
-    
+public class ClientPlayerDTO extends PlayerDTO{
+ 
     @Override
     public Player convertToPlayer() {
         // TODO Auto-generated method stub

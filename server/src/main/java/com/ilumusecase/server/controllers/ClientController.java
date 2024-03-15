@@ -19,7 +19,7 @@ public class ClientController {
     
     @GetMapping("/clients")
     public List<Client> retreiveClients(){
-        return database.getClientDatabase().retrieveAll();
+        return database.getClientDatabase().findAll();
     } 
 
     @PostMapping("/register")

@@ -22,7 +22,10 @@ public class Table {
     @GeneratedValue
     private Long id;
 
-    String name;
+    private String name;
+    private String category;
+
+    private Integer blindSize;
     
     @ManyToMany
     private List<PlayerDTO> players = new ArrayList<>();

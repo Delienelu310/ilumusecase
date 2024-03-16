@@ -21,6 +21,8 @@ public class Table {
     @Id
     @GeneratedValue
     private Long id;
+
+    String name;
     
     @ManyToMany
     private List<PlayerDTO> players = new ArrayList<>();

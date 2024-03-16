@@ -21,14 +21,24 @@ public class TableController {
     
 
     @GetMapping("/tables")
-    public List<Table> retrieveTables(@RequestParam("query") String query, 
-        @RequestParam(name="itemsPerPage", defaultValue = "10") Integer itemsPerPage, 
-        @RequestParam(name="pageNumber", defaultValue = "0" ) Integer pageNumber
+    public List<Table> retrieveTables(
+        @RequestParam(name="query", required=false, defaultValue = "%") String query,
+        @RequestParam(name="authorUsernames", required=false, defaultValue = "%") List<String> authorUsernames,
+        @RequestParam(name="categories", required=false, defaultValue = "%") List<String> categories,
+        @RequestParam(name="itemsPerPage", required = false, defaultValue = "10") Integer itemsPerPage, 
+        @RequestParam(name="pageNumber", required= false, defaultValue = "0" ) Integer pageNumber
     ){
-        databaseInterface.getTableDatabase();
-        return null;
+        return databaseInterface.getTableDatabase().retrieveTables(query, authorUsernames, categories, pageNumber, itemsPerPage);
     }
 
+    @GetMapping("/tables/count")
+    public Long retrieveTableCount(
+        @RequestParam(name="query", required=false, defaultValue = "%") String query,
+        @RequestParam(name="authorUsernames", required=false, defaultValue = "%") List<String> authorUsernames,
+        @RequestParam(name="categories", required=false, defaultValue = "%") List<String> categories
+    ){
+        return databaseInterface.getTableDatabase().retrieveTableCount(query, authorUsernames, categories);
+    }
 
 
     @GetMapping("/tables/{tableId}")

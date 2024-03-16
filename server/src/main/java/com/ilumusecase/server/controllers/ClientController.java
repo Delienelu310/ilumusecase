@@ -1,7 +1,5 @@
 package com.ilumusecase.server.controllers;
 
-import java.util.List;
-
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,12 +17,15 @@ public class ClientController {
 
     @PostMapping("/register")
     public Client register(Client client){
-        // if(database.getClientDatabase())
-        return database.getClientDatabase().save(client);
+        if(!database.getClientDatabase().findById(client.getUsername()).isEmpty()) 
+            throw new RuntimeException();
+            
+        return database.getClientDatabase().addClient(client);
     }
 
     @GetMapping("/login")
     public void login(Client client){
-
+        if(database.getClientDatabase().findById(client.getUsername()).isEmpty()) 
+            throw new RuntimeException();
     }
 }

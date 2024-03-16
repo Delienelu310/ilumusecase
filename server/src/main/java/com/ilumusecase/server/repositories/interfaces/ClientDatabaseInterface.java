@@ -7,5 +7,5 @@ import com.ilumusecase.server.resources.Client;
 public interface ClientDatabaseInterface {
 
     public Optional<Client> findById(String username);
-    public Client save(Client client);
+    public Client addClient(Client client);
 }

@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function Filter({filterSet}){
+export default function Filter({filterSet, sendRequest}){
 
     /*
         the main property is filterSet
@@ -20,8 +20,12 @@ export default function Filter({filterSet}){
 
     return (
         <div>
+
+            {sendRequest && <button className="btn btn-primary" onClick={sendRequest}>Apply</button>}
+
             {filterSet.map((filterPoint, index) => (
                 <div key={`filterPoint_${index}`} className="m-1">
+                    {filterPoint.label}
                     {type == "single-input" ? 
                         <div>
                             <input value={filterPoint.chosenValues} onChange={event => filterPoint.setValues(event.target.value)}/>
@@ -67,6 +71,7 @@ export default function Filter({filterSet}){
                     }
                 </div>
             ))}
+
         </div>
     );
 }

@@ -16,19 +16,14 @@ import lombok.Data;
 public class ClientController {
     
     private DatabaseInterface database;
-    
-    @GetMapping("/clients")
-    public List<Client> retreiveClients(){
-        return database.getClientDatabase().findAll();
-    } 
 
     @PostMapping("/register")
     public Client register(Client client){
-        
+        // if(database.getClientDatabase())
         return database.getClientDatabase().save(client);
     }
 
-    @GetMapping
+    @GetMapping("/login")
     public void login(Client client){
 
     }

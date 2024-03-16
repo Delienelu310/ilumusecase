@@ -12,21 +12,24 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 public class TableController {
 
     DatabaseInterface databaseInterface;
     
-    @GetMapping("/test")
-    public String test(){
-        return "Hello world";
-    }
 
     @GetMapping("/tables")
-    public List<Table> retrieveTables(){
+    public List<Table> retrieveTables(@RequestParam("query") String query, 
+        @RequestParam(name="itemsPerPage", defaultValue = "10") Integer itemsPerPage, 
+        @RequestParam(name="pageNumber", defaultValue = "0" ) Integer pageNumber
+    ){
+        databaseInterface.getTableDatabase();
         return null;
     }
+
+
 
     @GetMapping("/tables/{tableId}")
     public Table retrieveTableById(@PathVariable("tableId") Long tableId){

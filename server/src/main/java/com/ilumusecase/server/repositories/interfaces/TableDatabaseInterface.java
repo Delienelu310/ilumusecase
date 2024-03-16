@@ -11,4 +11,6 @@ public interface TableDatabaseInterface {
         Integer pageNumber, Integer pageSize);
     public Long retrieveTableCount(String query, List<String> authorUsernames, List<String> categories);
     public Optional<Table> findById(Long id);
+
+    public void deleteById(Long id);
 }

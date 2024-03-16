@@ -37,6 +37,11 @@ public class JpaTableDatabase implements TableDatabaseInterface  {
         return tableJpaRepository.retrieveTablesNumber(query, authorUsernames, categories);
     }
 
+    @Override
+    public void deleteById(Long id) {
+        tableJpaRepository.deleteById(id);
+    }
+
     
     
 }

@@ -4,11 +4,11 @@ export function retrieveTables({query, categories, authorUsernames, pageNumber, 
 
     let request = "/tables?"
     let params = [];
-    params.push(`query=${query}`);
-    params.push(`categories=${categories.join(",")}`);
-    params.push(`authorUsernames=${authorUsernames.join(",")}`);
-    params.push(`pageNumber=${pageNumber}`);
-    params.push(`pageSize=${pageSize}`);
+    if(query) params.push(`query=${query}`);
+    if(categories && categories.length > 0) params.push(`categories=${categories.join(",")}`);
+    if(authorUsernames && authorUsernames.length > 0) params.push(`authorUsernames=${authorUsernames.join(",")}`);
+    if(pageNumber || pageNumber == 0)params.push(`pageNumber=${pageNumber}`);
+    if(pageSize && pageSize > 0)params.push(`pageSize=${pageSize}`);
 
     let paramsStr = params.join("&");
 
@@ -19,9 +19,9 @@ export function retrieveTablesCount({query, categories, authorUsernames}){
     let request = "/tables/count?";
 
     let params = [];
-    params.push(`query=${query}`);
-    params.push(`categories=${categories.join(",")}`);
-    params.push(`authorUsernames=${authorUsernames.join(",")}`);
+    if(query) params.push(`query=${query}`);
+    if(categories && categories.length > 0) params.push(`categories=${categories.join(",")}`);
+    if(authorUsernames && authorUsernames.length > 0) params.push(`authorUsernames=${authorUsernames.join(",")}`);
 
     let paramsStr = params.join("&");
 

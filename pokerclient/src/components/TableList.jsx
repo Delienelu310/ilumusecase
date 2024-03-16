@@ -33,7 +33,16 @@ export default function TableList({allCategories}){
     }
 
     function sendRequest(){
-
+        getNumberOfTables()
+            .then(number => {
+                return retrieveTables({query, categories, authorUsernames, pageNumber, pageSize});
+            })
+            .then(response => {
+                setTables(response.data);
+            })
+            .catch(e => {
+                console.log(e);
+            });
     }
 
     return (

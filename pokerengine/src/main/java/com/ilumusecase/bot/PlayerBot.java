@@ -52,13 +52,6 @@ public class PlayerBot implements Player{
         this.currentBet = bet;
     }
 
-    public List<Card> getHand() {
-        return hand;
-    }
-
-    public void setHand(List<Card> hand) {
-        this.hand = hand;
-    }
 
     public PlayerStrategy getPlayerStrategy() {
         return playerStrategy;

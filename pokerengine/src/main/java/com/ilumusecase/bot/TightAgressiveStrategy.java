@@ -112,7 +112,36 @@ public class TightAgressiveStrategy implements PlayerStrategy {
     }
 
     public Action postflopStrategy(Round round, Player player){
-        return null;
+        Integer powerFactor = calculatePowerFactor(round);
+        Integer handPower = getPostflopHandPower(round, player);
+
+        Integer toFillBet = getBetFillingMoney(round, player);
+        Integer bank = getTotalBankMoney(round);
+
+        Action action = new Action();
+        action.setPlayer(player);
+        Random random = new Random();
+        
+        if( (handPower >= 5 || handPower >= 3 && powerFactor < 3) && toFillBet + player.getCurrentBet() < 0.7 * bank ){
+            action.setSize((int)(0.7 * bank));
+            if( (toFillBet + player.getCurrentBet()) == 0 ) action.setActionType(ActionType.BET);
+            else action.setActionType(ActionType.RAISE);
+        }else if(handPower >= 3 && toFillBet + player.getCurrentBet() >= 0.7 * bank){
+            action.setActionType(ActionType.CALL);
+            action.setSize(toFillBet);
+        }else if(handPower <= 2 && handPower >= 1 && toFillBet + player.getCurrentBet() < 0.7 * bank){
+            if(toFillBet.equals(0)) action.setActionType(ActionType.CHECK);
+            else action.setActionType(ActionType.CALL);
+            action.setSize(toFillBet);
+        }else if(random.nextDouble() < 0.1 && player.getCurrentBet() < 0.7 * bank && handPower.equals(2)){
+            action.setSize((int)(0.7 * bank));
+            if( (toFillBet + player.getCurrentBet()) == 0 ) action.setActionType(ActionType.BET);
+            else action.setActionType(ActionType.RAISE);
+        }else{
+            action.setActionType(ActionType.FOLD);
+        }
+
+        return action;
     }
 
     public Action riverStrategy(Round round, Player player){

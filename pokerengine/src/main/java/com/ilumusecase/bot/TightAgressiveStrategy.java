@@ -23,21 +23,17 @@ public class TightAgressiveStrategy implements PlayerStrategy {
 
         Integer stageNumber = getStageNumber(round);
         if(stageNumber.equals(0)) return preflopStrategy(round, player);
-
-
-        List<Card> bestHand = compareHandsMethod.findBestHand(round, player.getPokerHand());
-
-        Integer handPower = compareHandsMethod.getHandPower(bestHand);
-        List<Integer> ranks = compareHandsMethod.getRanks(bestHand);
-
-        return null;
+        if(stageNumber > 0 && stageNumber < 1) return postflopStrategy(round, player);
+        if(stageNumber.equals(3)) return riverStrategy(round, player);
+        
+        throw new RuntimeException();
     }
 
     private Action preflopStrategy(Round round, Player player){
         /*
             If no bet and if (ranks number + pos number > 26) then bet, or if bet then call
             Else if pair/ the same suit + close ranks then call (bb or bet)
-            10% - 3bet with pair or samesuit+closeranks
+           10% - 3bet with pair or samesuit+closeranks
             if ranks number > 25 then call
             if pair and rank > 10 then 4bet and all in  
         */
@@ -113,6 +109,118 @@ public class TightAgressiveStrategy implements PlayerStrategy {
                 return action;
             }
         }
+    }
+
+    public Action postflopStrategy(Round round, Player player){
+        return null;
+    }
+
+    public Action riverStrategy(Round round, Player player){
+
+        Integer powerFactor = calculatePowerFactor(round);
+        Integer handPower = getPostflopHandPower(round, player);
+
+        Integer toFillBet = getBetFillingMoney(round, player);
+        Integer bank = getTotalBankMoney(round);
+
+        Action action = new Action();
+        action.setPlayer(player);
+        Random random = new Random();
+
+        if(handPower >= 5 || handPower >= 4 && powerFactor < 3){
+            action.setSize(player.getBankroll());
+            if(player.getBankroll() < toFillBet){
+                
+                action.setActionType(ActionType.CALL);
+            }else{
+                action.setActionType(ActionType.RAISE);
+            }
+        }else if(handPower >= 3 && toFillBet + player.getCurrentBet() < 0.7 * bank ){
+            action.setSize((int)(0.7 * bank));
+            if( (toFillBet + player.getCurrentBet()) == 0 ) action.setActionType(ActionType.BET);
+            else action.setActionType(ActionType.RAISE);
+        }else if(handPower >= 3 && toFillBet + player.getCurrentBet() >= 0.7 * bank){
+            action.setActionType(ActionType.CALL);
+            action.setSize(toFillBet);
+        }else if(handPower.equals(1) && toFillBet + player.getCurrentBet() < 0.7 * bank){
+            action.setActionType(ActionType.CALL);
+            action.setSize(toFillBet);
+        }else if(random.nextDouble() < 0.1 && player.getCurrentBet() < 0.7 * bank && handPower.equals(2)){
+            action.setSize((int)(0.7 * bank));
+            if( (toFillBet + player.getCurrentBet()) == 0 ) action.setActionType(ActionType.BET);
+            else action.setActionType(ActionType.RAISE);
+        }else{
+            action.setActionType(ActionType.FOLD);
+        }
+
+        return action;
+    }
+
+    private Integer getPostflopHandPower(Round round, Player player){
+        //0 nothing
+        //1 second pair 
+        //2 drawing straight or flush
+        //3 high pair with strong kicker or overpair
+        //4 2 pairs or set
+        //5 straight or flush
+        //6 stronger hand
+
+        List<Card> bestHand = compareHandsMethod.findBestHand(round, player.getPokerHand());
+
+        Integer handPower = compareHandsMethod.getHandPower(bestHand);
+        List<Integer> ranks = compareHandsMethod.getRanks(bestHand);
+        Integer boardPairsNumber = getBoardPairsNumber(round);
+
+        if(handPower >= 6) return 6;
+        if(handPower >= 4 && boardPairsNumber < 2) return 5;
+        if(handPower >= 2 && boardPairsNumber.equals(0)) return 4;
+
+        Integer highestRank = round.getTableCards().stream().sorted((card1, card2) -> card2.getRank() - card2.getRank()).toList().get(0).getRank();
+        Integer secondHighestRank = round.getTableCards().stream().sorted((card1, card2) -> card2.getRank() - card2.getRank()).toList().get(1).getRank();
+        
+        if(handPower.equals(1) && boardPairsNumber.equals(0) && ranks.get(0) >= highestRank) return 3;
+        if(isDrawingHand(round, player)) return 2;
+        if(handPower >= 2 && boardPairsNumber.equals(1)) return 1;
+        if(handPower.equals(1) && boardPairsNumber.equals(0) && ranks.get(0) >= secondHighestRank) return 1;
+
+        return 0;
+
+    }
+
+    private Boolean isDrawingHand(Round round, Player player){  
+        
+        //if flush draw?
+        Map<Integer, Integer> map = new HashMap<>();
+        List<Card> temp = new ArrayList<>();
+        temp.addAll(player.getPokerHand());
+        temp.addAll(round.getTableCards());
+        for(Card card : temp){
+            if(map.containsKey(card.getSuit())) map.put(card.getSuit(), 0);
+            map.put(card.getSuit(), map.get(card.getSuit()) + 1);
+        }
+
+        for(Integer val : map.values()){
+            if(val >= 4) return true;
+        }
+        
+        //if straight?
+
+        temp = new ArrayList<>();
+        temp.addAll(player.getPokerHand());
+        temp.addAll(round.getTableCards());
+        temp.sort( (a,b) -> a.getRank() - b.getRank());
+
+        cards4: for(Integer i = 0; i < temp.size() - 4; i++){
+            map = compareHandsMethod.mapTheHand(temp);
+            for(Integer j = i; j < i + 4; j++){
+                if(map.get(temp.get(j).getRank()) > 1) continue cards4;
+            }
+            
+            if(temp.get(i + 3).getRank() - temp.get(i).getRank() == 3) return true;
+        }
+
+
+        return false;
     }
 
     private Integer getStageNumber(Round round){

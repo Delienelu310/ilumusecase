@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import com.ilumusecase.server.repositories.interfaces.DatabaseInterface;
 import com.ilumusecase.server.resources.Table;
+import com.ilumusecase.server.resources.TableDetails;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -51,7 +52,10 @@ public class TableController {
     }
 
     @PostMapping("/tables")
-    public Table createTable(@RequestBody Table table){
+    public Table createTable(@RequestBody TableDetails tableDetails){
+        Table table = new Table();
+        table.setBlindSize(tableDetails.getBlindSize());
+        // table.setCategory();
         return null;
     }
 

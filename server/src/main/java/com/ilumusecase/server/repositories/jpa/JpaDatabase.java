@@ -2,6 +2,7 @@ package com.ilumusecase.server.repositories.jpa;
 
 import org.springframework.stereotype.Repository;
 
+import com.ilumusecase.server.repositories.interfaces.CategoriesDatabaseInterface;
 import com.ilumusecase.server.repositories.interfaces.ClientDatabaseInterface;
 import com.ilumusecase.server.repositories.interfaces.DatabaseInterface;
 import com.ilumusecase.server.repositories.interfaces.TableDatabaseInterface;
@@ -14,7 +15,8 @@ public class JpaDatabase implements DatabaseInterface{
 
     private JpaClientDatabase jpaClientDatabase;
     private JpaTableDatabase jpaTableDatabase;
-    private JpaRoundDatabase jpaRoundDatabase;    
+    private JpaRoundDatabase jpaRoundDatabase;  
+    private JpaCategoriesDatabase jpaCategoriesDatabase;  
 
     @Override
     public ClientDatabaseInterface getClientDatabase() {
@@ -29,6 +31,11 @@ public class JpaDatabase implements DatabaseInterface{
     @Override
     public RoundDatabaseInterface getRoundDatabase(){
         return jpaRoundDatabase;
+    }
+
+    @Override
+    public CategoriesDatabaseInterface getCategoriesDatabase() {
+        return jpaCategoriesDatabase;
     }
     
 }

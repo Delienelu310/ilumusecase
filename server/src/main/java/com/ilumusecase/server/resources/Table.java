@@ -23,18 +23,20 @@ public class Table {
     private Long id;
 
     private String name;
-    private String category;
+
+    @ManyToOne
+    private Category category;
 
     private Integer blindSize;
     
-    @ManyToMany
+    @OneToMany
     private List<PlayerDTO> players = new ArrayList<>();
     
     @OneToOne
     private RoundDTO currentRound;
     
     @OneToMany
-    private List<RoundDTO> playedRound = new ArrayList<>();
+    private List<RoundDTO> playedRounds = new ArrayList<>();
 
     @ManyToOne
     private Client admin;

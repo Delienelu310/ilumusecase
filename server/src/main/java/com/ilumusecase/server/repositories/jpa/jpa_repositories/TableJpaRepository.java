@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface TableJpaRepository extends JpaRepository<Table, Long> {
     
-    @Query("SELECT t FROM Table t WHERE t.name=:query AND t.admin.username IN :authorUsernames AND t.category IN :categories")
+    @Query("SELECT t FROM Table t WHERE t.name=:query AND t.admin.username IN :authorUsernames AND t.category.category IN :categories")
     public List<Table> retrieveTables(
         @Param("query") String query, 
         @Param("authorUsernames") List<String> authorUsername, 
@@ -19,7 +19,7 @@ public interface TableJpaRepository extends JpaRepository<Table, Long> {
         Pageable pageable
     );
 
-    @Query("SELECT COUNT(t) FROM Table t WHERE t.name=:query AND t.admin.username IN :authorUsernames AND t.category IN :categories")
+    @Query("SELECT COUNT(t) FROM Table t WHERE t.name=:query AND t.admin.username IN :authorUsernames AND t.category.category IN :categories")
     public Long retrieveTablesNumber(
         @Param("query") String query, 
         @Param("authorUsernames") List<String> authorUsername, 

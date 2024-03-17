@@ -1,7 +1,6 @@
 package com.ilumusecase.server.controllers;
 
 import java.util.List;
-import java.util.Optional;
 
 import com.ilumusecase.server.repositories.interfaces.DatabaseInterface;
 import com.ilumusecase.server.resources.Table;
@@ -45,23 +44,28 @@ public class TableController {
 
     @GetMapping("/tables/{tableId}")
     public Table retrieveTableById(@PathVariable("tableId") Long tableId){
-        Optional<Table> table = databaseInterface.getTableDatabase().findById(tableId);
-        if(table.isEmpty())
-            throw new RuntimeException();
-        return table.get();
+        return databaseInterface.getTableDatabase().findById(tableId);
     }
 
     @PostMapping("/tables")
     public Table createTable(@RequestBody TableDetails tableDetails){
         Table table = new Table();
         table.setBlindSize(tableDetails.getBlindSize());
-        // table.setCategory();
-        return null;
+        table.setCategory(databaseInterface.getCategoriesDatabase().retrieveCategoryById(tableDetails.getCategory()));
+        table.setAdmin(databaseInterface.getClientDatabase().findById(tableDetails.getAdminUsername()));
+        table.setName(tableDetails.getName());
+
+        return databaseInterface.getTableDatabase().createTable(table);
     }
 
     @DeleteMapping("/tables/{tableId}")
     public void deleteTable(@PathVariable("tableId") Long tableId){
         databaseInterface.getTableDatabase().deleteById(tableId);
+    }
+
+    @PutMapping("/tables/{tableId}/add")
+    public Table add(@PathVariable("tableId") Long tableId){
+        return null;
     }
 
     @PutMapping("/tables/{tableId}/enter")

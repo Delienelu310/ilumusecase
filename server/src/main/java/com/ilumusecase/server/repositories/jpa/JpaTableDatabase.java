@@ -1,7 +1,6 @@
 package com.ilumusecase.server.repositories.jpa;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.PageRequest;
@@ -28,8 +27,8 @@ public class JpaTableDatabase implements TableDatabaseInterface  {
     }
 
     @Override
-    public Optional<Table> findById(Long id) {
-        return tableJpaRepository.findById(id);
+    public Table findById(Long id) {
+        return tableJpaRepository.findById(id).get();
     }
 
     @Override
@@ -40,6 +39,11 @@ public class JpaTableDatabase implements TableDatabaseInterface  {
     @Override
     public void deleteById(Long id) {
         tableJpaRepository.deleteById(id);
+    }
+
+    @Override
+    public Table createTable(Table table) {
+        return tableJpaRepository.save(table);
     }
 
     

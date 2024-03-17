@@ -17,15 +17,12 @@ public class ClientController {
 
     @PostMapping("/register")
     public Client register(@RequestBody Client client){
-        if(!database.getClientDatabase().findById(client.getUsername()).isEmpty()) 
-            throw new RuntimeException();
             
         return database.getClientDatabase().addClient(client);
     }
 
     @PostMapping("/login")
     public void login(@RequestBody Client client){
-        if(database.getClientDatabase().findById(client.getUsername()).isEmpty()) 
-            throw new RuntimeException();
+        database.getClientDatabase().findById(client.getUsername());
     }
 }

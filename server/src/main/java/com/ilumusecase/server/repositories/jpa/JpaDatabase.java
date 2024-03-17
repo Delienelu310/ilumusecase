@@ -7,6 +7,8 @@ import com.ilumusecase.server.repositories.interfaces.ClientDatabaseInterface;
 import com.ilumusecase.server.repositories.interfaces.DatabaseInterface;
 import com.ilumusecase.server.repositories.interfaces.TableDatabaseInterface;
 import com.ilumusecase.server.repositories.interfaces.RoundDatabaseInterface;
+import com.ilumusecase.server.repositories.interfaces.StrategiesDatabaseInterface;
+
 import lombok.Data;
 
 @Data
@@ -16,7 +18,8 @@ public class JpaDatabase implements DatabaseInterface{
     private JpaClientDatabase jpaClientDatabase;
     private JpaTableDatabase jpaTableDatabase;
     private JpaRoundDatabase jpaRoundDatabase;  
-    private JpaCategoriesDatabase jpaCategoriesDatabase;  
+    private JpaCategoriesDatabase jpaCategoriesDatabase;
+    private JpaStrategiesDatabase jpaStrategiesDatabase;  
 
     @Override
     public ClientDatabaseInterface getClientDatabase() {
@@ -36,6 +39,11 @@ public class JpaDatabase implements DatabaseInterface{
     @Override
     public CategoriesDatabaseInterface getCategoriesDatabase() {
         return jpaCategoriesDatabase;
+    }
+
+    @Override
+    public StrategiesDatabaseInterface getStrategiesDatabaseInterface() {
+        return jpaStrategiesDatabase;
     }
     
 }

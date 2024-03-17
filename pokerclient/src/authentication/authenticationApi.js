@@ -9,11 +9,7 @@ export function register({username, password}, {logout}){
                 return false;
             }
             return login({username, password});
-        }).catch(error => {
-            console.log(error);
-            logout();
-            return false;
-        });
+        })
 }
 
 export function login({username, password}, {setUsername, setAuthorised, logout}){
@@ -28,8 +24,5 @@ export function login({username, password}, {setUsername, setAuthorised, logout}
             setAuthorised(true);
 
             return true;
-        }).catch(error => {
-            logout();
-            return false;
         });
 }

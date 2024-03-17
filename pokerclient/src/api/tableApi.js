@@ -1,5 +1,10 @@
 import { apiClient } from "./ApiClient";
 
+export function retrieveCategories(){
+    return apiClient.get("/categories");
+}
+
+
 export function retrieveTables({query, categories, authorUsernames, pageNumber, pageSize}){
 
     let request = "/tables?"
@@ -31,4 +36,8 @@ export function retrieveTablesCount({query, categories, authorUsernames}){
 
 export function retrieveTableById({tableId}){
     return apiClient.get(`/tables/${tableId}`);
+}
+
+export function createTable({name, category, adminUsername, blindSize}){
+    return apiClient.post(`/tables`, {name, category, adminusername, blindSize});
 }

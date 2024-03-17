@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { useAuth } from "../authentication/AuthContext";
+import { createTable, retrieveCategories } from "../api/tableApi";
+import { useNavigate } from "react-router-dom";
 
 
 export default function CreateTablePage({categories}){
@@ -8,6 +10,25 @@ export default function CreateTablePage({categories}){
 
     const [name, setName] = useState();
     const [category, setCategory] = useState();
+    const [blindSize, setBlindSize] = useState();
+
+    const [categories, setCategories] = useState([]);
+    const navigate = useNavigate();
+
+    function sendRequest(){
+        createTable({category, name, adminUsername: username, blindSize})
+            .then(response => {
+                navigate(`/tables/${response.data.id}`);
+            })
+            .catch(e => console.log(e));
+    }
+
+    useEffect(() => {
+        retrieveCategories()
+            .then(response => {
+                setCategories(response.data);
+            }).catch(e => console.log(e));
+    }, []);
 
     return (
         <div>
@@ -16,7 +37,7 @@ export default function CreateTablePage({categories}){
             <br/>
 
             <span>Choose category:</span>
-            <select value={filterPoint.chosenValues} onChange={event => setCategory(event.target.value)}>
+            <select value={category} onChange={event => setCategory(event.target.value)}>
                 <option value={null}>No value</option>
                 {categories.map((val, index) => (
                     <option key={`option_${index}`} value={val}>{val}</option>
@@ -24,8 +45,11 @@ export default function CreateTablePage({categories}){
             </select>
             <br/>
 
-            <button className="m-2 btn btn-success">Create</button>
-            <button className="m-2 btn btn-danger">Cancel</button>
+            <span>Blind size:</span>
+            <input value={blindSize} onChange={e => setBlindSize(e.target.value)}/>
+
+            <button className="m-2 btn btn-success" onClick={e => sendRequest()}>Create</button>
+            <button className="m-2 btn btn-danger" onClick={e => navigate("/")}>Cancel</button>
         </div>
     );
 }

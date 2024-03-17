@@ -1,10 +1,13 @@
 package com.ilumusecase.server.resources;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -29,8 +32,8 @@ public class Table {
 
     private Integer blindSize;
     
-    @OneToMany
-    private List<PlayerDTO> players = new ArrayList<>();
+    @OneToMany(cascade = CascadeType.ALL)
+    private Map<Integer, PlayerDTO> players = new HashMap<>();
     
     @OneToOne
     private RoundDTO currentRound;

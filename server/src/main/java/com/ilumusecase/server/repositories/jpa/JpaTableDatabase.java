@@ -46,6 +46,14 @@ public class JpaTableDatabase implements TableDatabaseInterface  {
         return tableJpaRepository.save(table);
     }
 
+    @Override
+    public Table updateTable(Long id, Table table) {
+        if( tableJpaRepository.findById(id).isEmpty()) 
+            throw new RuntimeException();
+        table.setId(id);
+        return tableJpaRepository.save(table);
+    }
+
     
     
 }

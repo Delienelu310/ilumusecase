@@ -14,4 +14,5 @@ public class Category {
     String category;
     
     String classFullName;
+    Integer maxPlayers;
 }

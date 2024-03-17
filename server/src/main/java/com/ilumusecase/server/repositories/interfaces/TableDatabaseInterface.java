@@ -12,6 +12,7 @@ public interface TableDatabaseInterface {
     public Table findById(Long id);
 
     public Table createTable(Table table);
+    public Table updateTable(Long id, Table table);
 
     public void deleteById(Long id);
 }

@@ -3,8 +3,12 @@ package com.ilumusecase.server.controllers;
 import java.util.List;
 
 import com.ilumusecase.server.repositories.interfaces.DatabaseInterface;
+import com.ilumusecase.server.resources.BotStrategy;
+import com.ilumusecase.server.resources.Client;
 import com.ilumusecase.server.resources.Table;
 import com.ilumusecase.server.resources.TableDetails;
+import com.ilumusecase.server.resources.players.BotPlayerDTO;
+import com.ilumusecase.server.resources.players.ClientPlayerDTO;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -63,19 +67,72 @@ public class TableController {
         databaseInterface.getTableDatabase().deleteById(tableId);
     }
 
-    @PutMapping("/tables/{tableId}/add")
-    public Table add(@PathVariable("tableId") Long tableId){
-        return null;
+    @PutMapping("/tables/{tableId}/add/player/{pos}/client/{username}")
+    public Table addClient(@PathVariable("tableId") Long tableId, @PathVariable("pos") Integer pos, @PathVariable("username") String username){
+        Table table = databaseInterface.getTableDatabase().findById(tableId);
+        if(pos >= table.getCategory().getMaxPlayers()) throw new RuntimeException();
+        if(table.getPlayers().containsKey(pos)) throw new RuntimeException();
+        
+        Client client = databaseInterface.getClientDatabase().findById(username);
+        ClientPlayerDTO clientPlayerDTO = new ClientPlayerDTO();
+        clientPlayerDTO.setClient(client);
+
+        table.getPlayers().put(pos, clientPlayerDTO);
+        
+        return databaseInterface.getTableDatabase().updateTable(tableId, table);
+          
     }
 
-    @PutMapping("/tables/{tableId}/enter")
-    public Table enterTable(@PathVariable("tableId") Long tableId){
-        return null;
+    @PutMapping("/tables/{tableId}/remove/player/{pos}")
+    public Table removeClient(@PathVariable("tableId") Long tableId, @PathVariable("pos") Integer pos){
+        Table table = databaseInterface.getTableDatabase().findById(tableId);
+        if(pos >= table.getCategory().getMaxPlayers()) throw new RuntimeException();
+        if(!table.getPlayers().containsKey(pos)) throw new RuntimeException();
+
+        table.getPlayers().remove(pos);
+        
+        return databaseInterface.getTableDatabase().updateTable(tableId, table);  
     }
 
-    @PutMapping("/tables/{tableId}/leave")
-    public Table leaveTable(@PathVariable("tableId") Long tableId){
-        return null;
+    @PutMapping("/tables/{tableId}/add/player/{pos}/bot/{strategy}")
+    public Table addBot(@PathVariable("tableId") Long tableId, @PathVariable("pos") Integer pos, @PathVariable("strategy") String strategy){
+        Table table = databaseInterface.getTableDatabase().findById(tableId);
+        if(pos >= table.getCategory().getMaxPlayers()) throw new RuntimeException();
+        if(table.getPlayers().containsKey(pos)) throw new RuntimeException();
+
+        BotStrategy botStrategy = databaseInterface.getStrategiesDatabaseInterface().retrieveStrategyById(strategy);
+        BotPlayerDTO botPlayerDTO = new BotPlayerDTO();
+        botPlayerDTO.setBotStrategy(botStrategy);
+
+        table.getPlayers().put(pos, botPlayerDTO);
+        
+        return databaseInterface.getTableDatabase().updateTable(tableId, table);
+    }
+
+
+    @PutMapping("/tables/{tableId}/enter/{username}")
+    public Table enterTable(@PathVariable("tableId") Long tableId, @PathVariable("username") String username){
+        Table table = databaseInterface.getTableDatabase().findById(tableId);
+        List<Client> viewers =  table.getViewers();
+        if(viewers.stream().anyMatch(cl -> cl.getUsername().equals(username)))
+            throw new RuntimeException();
+        
+        return databaseInterface.getTableDatabase().updateTable(tableId, table);
+        
+    }
+
+    @PutMapping("/tables/{tableId}/leave/{username}")
+    public Table leaveTable(@PathVariable("tableId") Long tableId, @PathVariable("username") String username){
+        Table table = databaseInterface.getTableDatabase().findById(tableId);
+        List<Client> viewers =  table.getViewers();
+
+        if(viewers.stream().anyMatch(cl -> cl.getUsername().equals(username))){
+            viewers.removeIf( cl -> cl.getUsername().equals(username));
+        }else{
+            throw new RuntimeException();
+        }
+        
+        return databaseInterface.getTableDatabase().updateTable(tableId, table);
     }
 
     

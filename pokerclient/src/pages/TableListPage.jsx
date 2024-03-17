@@ -1,20 +1,16 @@
 import { useState } from "react";
-import SearchBar from "../components/SearchBar";
+import TableList from "../components/TableList";
 
 export default function TableListPage(){
 
-    const [query, setQuery] = useState("");
-    const [authorUsernames, setAuthorUsernames] = useState(null);
-    const [categories, setCategories] = useState(null);
-    const [pageNumber, setPageNumber] = useState(0);
-    const [pageSize, setPageSize] = useState();
+
 
     return (
         <div>
             <div>
-                <SearchBar/>
-                <hr/>
+                <input/>
             </div>
+            <TableList allCategories={["holdem6"]}/>
         </div>
     );
 }

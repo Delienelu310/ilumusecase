@@ -19,7 +19,7 @@ public class TableSocketController {
     private DatabaseInterface database;
 
     @MessageMapping("/{table_id}/refresh")
-    @SendTo("/table/{table_id}")
+    @SendTo("/tables/{table_id}")
     public Table refresh(@DestinationVariable("table_id") Long tableId){
         
         Table table = database.getTableDatabase().findById(tableId);

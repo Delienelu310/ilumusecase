@@ -23,7 +23,7 @@ public class ClientPlayer implements Player{
     private Client client;
 
     @Override
-    public Action getAction(Round arg0) {
+    public Action getAction(Round round) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'getAction'");
     }    

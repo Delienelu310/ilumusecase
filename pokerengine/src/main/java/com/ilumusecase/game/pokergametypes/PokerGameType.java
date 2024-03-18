@@ -8,5 +8,7 @@ public interface PokerGameType {
     public PokerGameIsFinishedMethod getPokerGameIsFinishedMethod();
     public PokerGameGetCurrentPlayerMethod getPokerGameGetCurrentPlayerMethod();
     public PokerGameApplyMoveMethod getPokerGameApplyMoveMethod();
+    public PokerGameFinalizeMethod getPokerGameFinalizeMethod();
+    public PokerGameCompareHandsMethod getPokerGameCompareHandsMethod();
 
 }

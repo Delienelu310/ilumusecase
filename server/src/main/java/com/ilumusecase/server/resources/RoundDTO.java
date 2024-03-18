@@ -7,11 +7,12 @@ import com.ilumusecase.game.Card;
 import com.ilumusecase.game.Deck;
 import com.ilumusecase.game.Round;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -27,10 +28,13 @@ public class RoundDTO {
     private Integer blindSize;
     private Integer bank;
 
-    @ManyToMany
+    @OneToMany(cascade = CascadeType.ALL)
     private List<PlayerDTO> players;
-    @ManyToMany
+    @OneToMany(cascade = CascadeType.ALL)
     private List<PlayerDTO> playersLeft;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<ActionDTO> actions;
 
     @ElementCollection
     private List<String> deck;

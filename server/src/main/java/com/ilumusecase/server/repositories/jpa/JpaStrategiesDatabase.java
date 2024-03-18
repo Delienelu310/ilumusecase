@@ -24,6 +24,7 @@ public class JpaStrategiesDatabase implements StrategiesDatabaseInterface{
     ) {
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
         return strategiesJpaRepository.retrieveStrategies(query, category, authors, pageable);
+
     }
 
     @Override

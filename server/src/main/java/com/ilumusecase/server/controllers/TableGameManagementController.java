@@ -7,8 +7,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ilumusecase.server.repositories.interfaces.DatabaseInterface;
+import com.ilumusecase.server.resources.ActionDTO;
 import com.ilumusecase.server.resources.Table;
-import com.ilumusecase.game.Action;
+import com.ilumusecase.server.thread.TableThread;
 
 import lombok.Data;
 
@@ -17,34 +18,46 @@ import lombok.Data;
 public class TableGameManagementController {
     
     private DatabaseInterface database;
+    private TableThread tableThread;
 
     @PutMapping("/tables/{talbe_id}/start")
     @SendTo("/tables/{table_id}")
-    public Table startRound(@PathVariable("table_id") Long tableId){
-        return null;
+    public void startRound(@PathVariable("table_id") Long tableId){
+
+        Table table = database.getTableDatabase().findById(tableId);
+
+        tableThread.launchGame(table);
     }
 
     @PutMapping("/tables/{table_id}/pause")
     @SendTo("/tables/{table_id}")
     public Table pauseGame(@PathVariable("table_id") Long tableId){
-        return null;
+        Table table = database.getTableDatabase().findById(tableId);
+        
+        table.setIsPaused(true);
+        database.getTableDatabase().updateTable(tableId, table);
+        
+        return table;
     }
 
     @PutMapping("/tables/{table_id}/continue")
     @SendTo("/tables/{table_id}")
     public Table continueGame(@PathVariable("table_id") Long tableId){
-        return null;
-    }
+        Table table = database.getTableDatabase().findById(tableId);
+        
+        table.setIsPaused(false);
+        database.getTableDatabase().updateTable(tableId, table);
 
-    @PutMapping("/tables/{table_id}/next")
-    @SendTo("/tables/{table_id}")
-    public Table nextMove(@PathVariable("table_id") Long tableId){
-        return null;
+        return table;
     }
 
     @PutMapping("tables/{table_id}/add/action")
     @SendTo("/tables/{table_id}")
-    public Table addAction(@PathVariable("table_id") Long tableId, @RequestBody Action action){
-        return null;
+    public void addAction(@PathVariable("table_id") Long tableId, @RequestBody ActionDTO action){
+        
+        Table table = database.getTableDatabase().findById(tableId);
+        table.setNewAction(action);
+        database.getTableDatabase().updateTable(tableId, table);
+
     }
 }

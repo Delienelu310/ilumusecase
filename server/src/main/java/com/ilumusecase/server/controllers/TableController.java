@@ -110,31 +110,4 @@ public class TableController {
     }
 
 
-    // @PutMapping("/tables/{tableId}/enter/{username}")
-    // public Table enterTable(@PathVariable("tableId") Long tableId, @PathVariable("username") String username){
-    //     Table table = databaseInterface.getTableDatabase().findById(tableId);
-    //     List<Client> viewers =  table.getViewers();
-    //     if(viewers.stream().anyMatch(cl -> cl.getUsername().equals(username)))
-    //         throw new RuntimeException();
-        
-    //     return databaseInterface.getTableDatabase().updateTable(tableId, table);
-        
-    // }
-
-    // @PutMapping("/tables/{tableId}/leave/{username}")
-    // public Table leaveTable(@PathVariable("tableId") Long tableId, @PathVariable("username") String username){
-    //     Table table = databaseInterface.getTableDatabase().findById(tableId);
-    //     List<Client> viewers =  table.getViewers();
-
-    //     if(viewers.stream().anyMatch(cl -> cl.getUsername().equals(username))){
-    //         viewers.removeIf( cl -> cl.getUsername().equals(username));
-    //     }else{
-    //         throw new RuntimeException();
-    //     }
-        
-    //     return databaseInterface.getTableDatabase().updateTable(tableId, table);
-    // }
-
-    
-
 }

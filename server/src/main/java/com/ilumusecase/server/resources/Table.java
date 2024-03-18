@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.ilumusecase.game.Player;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -40,9 +39,11 @@ public class Table {
     
     @OneToOne
     private RoundDTO currentRound;
-    @OneToOne
-    private Player currentPlayer;
+    private Integer currentPlayerPosition;
     private Boolean isPaused;
+    private Integer currentSmallBlind;
+    @OneToOne
+    private ActionDTO newAction;
 
     @OneToMany
     private List<RoundDTO> playedRounds = new ArrayList<>();

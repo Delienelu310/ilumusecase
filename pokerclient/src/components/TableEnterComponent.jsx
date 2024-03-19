@@ -1,11 +1,14 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function TableEnterComponent(){
 
     const [id, setId] = useState(null);
 
-    function enterTable(){
+    const navigate = useNavigate();
 
+    function enterTable(){
+        navigate(`/tables/${id}`);
     }
 
     return (

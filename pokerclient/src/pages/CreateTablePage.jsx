@@ -4,7 +4,7 @@ import { createTable, retrieveCategories } from "../api/tableApi";
 import { useNavigate } from "react-router-dom";
 
 
-export default function CreateTablePage({categories}){
+export default function CreateTablePage(){
 
     const {username, isAuthorised} = useAuth();
 
@@ -22,6 +22,7 @@ export default function CreateTablePage({categories}){
             })
             .catch(e => console.log(e));
     }
+
 
     useEffect(() => {
         retrieveCategories()

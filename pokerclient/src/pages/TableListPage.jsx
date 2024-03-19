@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import TableList from "../components/TableList";
 import { retrieveCategories } from "../api/tableApi";
+import TableEnterComponent from "../components/TableEnterComponent";
 
 export default function TableListPage(){
 
@@ -15,6 +16,7 @@ export default function TableListPage(){
 
     return (
         <div>
+            <TableEnterComponent/>
             <TableList allCategories={categories}/>
         </div>
     );

@@ -4,6 +4,22 @@ export function retrieveCategories(){
     return apiClient.get("/categories");
 }
 
+export function retrieveStrategies({query, authors, categories, pageNumber, pageSize}){
+    let request = "/strategies?"
+    let params = [];
+    if(query) params.push(`query=${query}`);
+    if(categories && categories.length > 0) params.push(`categories=${categories.join(",")}`);
+    if(authors && authors.length > 0) params.push(`authors=${authors.join(",")}`);
+    if(pageNumber || pageNumber == 0)params.push(`pageNumber=${pageNumber}`);
+    if(pageSize && pageSize > 0)params.push(`pageSize=${pageSize}`);
+
+    let paramsStr = params.join("&");
+
+    if(params.length > 0) request += "?" + paramsStr;
+    
+    return apiClient.get(request);
+}
+
 
 export function retrieveTables({query, categories, authorUsernames, pageNumber, pageSize}){
 
@@ -17,7 +33,8 @@ export function retrieveTables({query, categories, authorUsernames, pageNumber, 
 
     let paramsStr = params.join("&");
 
-    return apiClient.get(request + paramsStr);
+    if(params.length > 0) request += "?" + paramsStr;
+    return apiClient.get(request);
 }
 
 export function retrieveTablesCount({query, categories, authorUsernames}){
@@ -30,7 +47,8 @@ export function retrieveTablesCount({query, categories, authorUsernames}){
 
     let paramsStr = params.join("&");
 
-    return apiClient.get(request + paramsStr);
+    if(params.length > 0) request += "?" + paramsStr;
+    return apiClient.get(request);
 
 }
 

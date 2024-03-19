@@ -3,6 +3,10 @@ import { useAuth } from "../authentication/AuthContext";
 import { useEffect, useState } from "react";
 
 import connectTableSocket from "../sockets/tableSocket";
+import TableAdminConsole from "../components/TableAdminConsole";
+import TablePlayersList from "../components/TablePlayersList";
+import TablePlayerConsole from "../components/TablePlayerConsole";
+import TableCanvas from "../components/TableCanvas";
 
 
 export default function TablePage(){
@@ -42,11 +46,16 @@ export default function TablePage(){
                 </div>
                 
                 {/* 2. the table - an oval or an rectange with certain number of squares on it  */}
-
+                <TableCanvas table={table}/>
 
                 {/* 3. player panel */}
+                {table.currentRound && <TablePlayerConsole/>}
+
                 {/* 4. player list panel */}
+                <TablePlayersList table={table}/>
+
                 {/* 5. admin console */}
+                {table.admin && table.admin.username == username && <TableAdminConsole table={table}/>}
             </div>}
             
             <button className="btn btn-danger m-3" onClick={() => {

@@ -43,7 +43,7 @@ export default function TablePlayersList({table, refresh}){
                 {table.admin && table.admin.username == username && <div>
                     <input value={strategyChosen} onChange={event => setStrategyChosen(event.target.value)}/>
                     <select value={strategyChosen} onChange={event => setStrategyChosen(event.target.value)}>
-                        {s.map((val, i) => (
+                        {strategies.map((val, i) => (
                             <option key={`option_${i}`} value={val}>{val}</option>
                         ))}
                     </select> 

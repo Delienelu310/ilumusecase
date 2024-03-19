@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 export default function TableEnterComponent(){
 
-    const [id, setId] = useState(null);
+    const [id, setId] = useState();
 
     const navigate = useNavigate();
 

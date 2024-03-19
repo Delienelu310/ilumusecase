@@ -35,7 +35,7 @@ export default function connectTableSocket(tableId, setTable){
 
     const refreshRoomForAll = () => {
         console.log("REFRESHING ALL");
-        client.send( `/room/${roomId}/refresh`,  {},  "{}");
+        client.send( `/tables/${tableId}/refresh`,  {},  "{}");
     }
 
 

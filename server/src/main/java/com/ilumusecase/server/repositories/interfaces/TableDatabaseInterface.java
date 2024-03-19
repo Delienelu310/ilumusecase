@@ -2,17 +2,17 @@ package com.ilumusecase.server.repositories.interfaces;
 
 import java.util.List;
 
-import com.ilumusecase.server.resources.Table;
+import com.ilumusecase.server.resources.TableDTO;
 
 public interface TableDatabaseInterface {
 
-    public List<Table> retrieveTables(String query, List<String> authorUsernames, List<String> categories, 
+    public List<TableDTO> retrieveTables(String query, List<String> authorUsernames, List<String> categories, 
         Integer pageNumber, Integer pageSize);
     public Long retrieveTableCount(String query, List<String> authorUsernames, List<String> categories);
-    public Table findById(Long id);
+    public TableDTO findById(Long id);
 
-    public Table createTable(Table table);
-    public Table updateTable(Long id, Table table);
+    public TableDTO createTable(TableDTO table);
+    public TableDTO updateTable(Long id, TableDTO table);
 
     public void deleteById(Long id);
 }

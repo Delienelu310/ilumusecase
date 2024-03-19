@@ -22,20 +22,20 @@ export default function TablePlayerConsole({table}){
             size: 0
         };
         switch(type){
-            case BET:  
+            case "BET":  
                 action.size = size;
                 break;
-            case FOLD:
-            case CHECK:
+            case "FOLD":
+            case "CHECK":
                 break;
-            case RAISE:
+            case "RAISE":
                 action.size = size - currentPlayer.currentBet;
                 break;
-            case CALL:
+            case "CALL":
                 action.size = currentStake - currentPlayer.currentBet
                 break;
             default:
-                throw new Exception();
+                throw new Error();
         }
 
         addAction({tableId: table.id, action})

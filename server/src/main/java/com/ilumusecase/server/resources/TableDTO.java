@@ -19,7 +19,7 @@ import jakarta.persistence.OneToOne;
 @Entity
 @Data
 @NoArgsConstructor
-public class Table {
+public class TableDTO {
 
     //unchangable data
     @Id
@@ -34,7 +34,8 @@ public class Table {
 
 
     //changable data
-    @OneToMany(cascade = CascadeType.ALL)
+    // @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany
     private Map<Integer, PlayerDTO> players = new HashMap<>();
     
     @OneToOne

@@ -1,20 +1,17 @@
 package com.ilumusecase.server.repositories.jpa;
 
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.ilumusecase.server.repositories.interfaces.ClientDatabaseInterface;
 import com.ilumusecase.server.repositories.jpa.jpa_repositories.ClientJpaRepository;
 import com.ilumusecase.server.resources.Client;
 
-import lombok.Data;
-
-
-@Data
 @Repository
 public class JpaClientDatabase implements ClientDatabaseInterface{
 
-
+    @Autowired
     private ClientJpaRepository clientJpaRepository;
 
     @Override

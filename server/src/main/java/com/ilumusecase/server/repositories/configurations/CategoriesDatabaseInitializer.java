@@ -1,15 +1,17 @@
 package com.ilumusecase.server.repositories.configurations;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.stereotype.Component;
 
 import com.ilumusecase.server.repositories.interfaces.DatabaseInterface;
 import com.ilumusecase.server.resources.Category;
 
-import lombok.Data;
 
-@Data
+@Component
 public class CategoriesDatabaseInitializer implements CommandLineRunner{
 
+    @Autowired
     private DatabaseInterface databaseInterface;
 
     @Override

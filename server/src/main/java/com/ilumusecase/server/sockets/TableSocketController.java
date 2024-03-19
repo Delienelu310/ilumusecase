@@ -6,7 +6,7 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 
 import com.ilumusecase.server.repositories.interfaces.DatabaseInterface;
-import com.ilumusecase.server.resources.Table;
+import com.ilumusecase.server.resources.TableDTO;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,9 +20,9 @@ public class TableSocketController {
 
     @MessageMapping("/{table_id}/refresh")
     @SendTo("/tables/{table_id}")
-    public Table refresh(@DestinationVariable("table_id") Long tableId){
+    public TableDTO refresh(@DestinationVariable("table_id") Long tableId){
         
-        Table table = database.getTableDatabase().findById(tableId);
+        TableDTO table = database.getTableDatabase().findById(tableId);
 
         return table;
     }

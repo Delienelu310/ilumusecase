@@ -5,21 +5,21 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.domain.Pageable;
 
-import com.ilumusecase.server.resources.Table;
+import com.ilumusecase.server.resources.TableDTO;
 
 import java.util.List;
 
-public interface TableJpaRepository extends JpaRepository<Table, Long> {
+public interface TableJpaRepository extends JpaRepository<TableDTO, Long> {
     
-    @Query("SELECT t FROM Table t WHERE t.name=:query AND t.admin.username IN :authorUsernames AND t.category.category IN :categories")
-    public List<Table> retrieveTables(
+    @Query("SELECT t FROM TableDTO t WHERE t.name=:query AND t.admin.username IN :authorUsernames AND t.category.category IN :categories")
+    public List<TableDTO> retrieveTables(
         @Param("query") String query, 
         @Param("authorUsernames") List<String> authorUsername, 
         @Param("categories") List<String> categories,
         Pageable pageable
     );
 
-    @Query("SELECT COUNT(t) FROM Table t WHERE t.name=:query AND t.admin.username IN :authorUsernames AND t.category.category IN :categories")
+    @Query("SELECT COUNT(t) FROM TableDTO t WHERE t.name=:query AND t.admin.username IN :authorUsernames AND t.category.category IN :categories")
     public Long retrieveTablesNumber(
         @Param("query") String query, 
         @Param("authorUsernames") List<String> authorUsername, 

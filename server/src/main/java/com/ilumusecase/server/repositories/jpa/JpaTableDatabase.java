@@ -3,23 +3,23 @@ package com.ilumusecase.server.repositories.jpa;
 import java.util.List;
 
 import org.springframework.data.domain.Pageable;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
 
 import com.ilumusecase.server.repositories.interfaces.TableDatabaseInterface;
 import com.ilumusecase.server.repositories.jpa.jpa_repositories.TableJpaRepository;
-import com.ilumusecase.server.resources.Table;
+import com.ilumusecase.server.resources.TableDTO;
 
-import lombok.Data;
 
 @Repository
-@Data
 public class JpaTableDatabase implements TableDatabaseInterface  {
 
+    @Autowired
     private TableJpaRepository tableJpaRepository;
 
     @Override
-    public List<Table> retrieveTables(String query, List<String> authorUsernames, List<String> categories,
+    public List<TableDTO> retrieveTables(String query, List<String> authorUsernames, List<String> categories,
         Integer pageNumber, Integer pageSize
     ){
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
@@ -27,7 +27,7 @@ public class JpaTableDatabase implements TableDatabaseInterface  {
     }
 
     @Override
-    public Table findById(Long id) {
+    public TableDTO findById(Long id) {
         return tableJpaRepository.findById(id).get();
     }
 
@@ -42,12 +42,12 @@ public class JpaTableDatabase implements TableDatabaseInterface  {
     }
 
     @Override
-    public Table createTable(Table table) {
+    public TableDTO createTable(TableDTO table) {
         return tableJpaRepository.save(table);
     }
 
     @Override
-    public Table updateTable(Long id, Table table) {
+    public TableDTO updateTable(Long id, TableDTO table) {
         if( tableJpaRepository.findById(id).isEmpty()) 
             throw new RuntimeException();
         table.setId(id);

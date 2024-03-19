@@ -2,6 +2,7 @@ package com.ilumusecase.server.repositories.jpa;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
@@ -10,12 +11,11 @@ import com.ilumusecase.server.repositories.interfaces.StrategiesDatabaseInterfac
 import com.ilumusecase.server.repositories.jpa.jpa_repositories.StrategiesJpaRepository;
 import com.ilumusecase.server.resources.BotStrategy;
 
-import lombok.Data;
 
 @Repository
-@Data
 public class JpaStrategiesDatabase implements StrategiesDatabaseInterface{
 
+    @Autowired
     private StrategiesJpaRepository strategiesJpaRepository;
 
     @Override

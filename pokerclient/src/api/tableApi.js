@@ -57,5 +57,5 @@ export function retrieveTableById({tableId}){
 }
 
 export function createTable({name, category, adminUsername, blindSize}){
-    return apiClient.post(`/tables`, {name, category, adminusername, blindSize});
+    return apiClient.post(`/tables`, {name, category, adminUsername, blindSize});
 }

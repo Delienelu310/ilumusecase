@@ -2,18 +2,17 @@ package com.ilumusecase.server.repositories.jpa;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.ilumusecase.server.repositories.interfaces.CategoriesDatabaseInterface;
 import com.ilumusecase.server.repositories.jpa.jpa_repositories.CategoriesJpaRepository;
 import com.ilumusecase.server.resources.Category;
 
-import lombok.Data;
-
 @Repository
-@Data
 public class JpaCategoriesDatabase implements CategoriesDatabaseInterface{
 
+    @Autowired
     private CategoriesJpaRepository categoriesJpaRepository;
 
     @Override

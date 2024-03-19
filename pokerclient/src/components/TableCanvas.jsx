@@ -1,7 +1,9 @@
 import { useRef, useEffect } from "react";
+import { useAuth } from "../authentication/AuthContext";
 
 export default function TableCanvas({table, size}){
     
+    const {username} = useAuth();
     const canvasRef = useRef(null);
 
     function drawTable(){
@@ -48,7 +50,7 @@ export default function TableCanvas({table, size}){
 
       let didFold = true;
       for(let j = 0; j < round.playersLeft.length; j++){
-        if(round.playersLeft[i].id == player.id){
+        if(round.playersLeft[j].id == player.id){
           didFold = false;
           break;
         }
@@ -108,7 +110,7 @@ export default function TableCanvas({table, size}){
         const x = (canvas.width / 2) + Math.cos(angle) * horizontalRadius - rectangleWidth / 2;
         const y = (canvas.height / 2) + Math.sin(angle) * verticalRadius - rectangleHeight / 2; 
 
-        drawPlayerRectangle(player, x, y, rectangleWidth, rectangleHeight);
+        drawPlayerRectangle(table.players[i], x, y, rectangleWidth, rectangleHeight);
       }
     }
 

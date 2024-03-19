@@ -5,7 +5,7 @@ import java.util.List;
 import com.ilumusecase.server.repositories.interfaces.DatabaseInterface;
 import com.ilumusecase.server.resources.BotStrategy;
 import com.ilumusecase.server.resources.Client;
-import com.ilumusecase.server.resources.Table;
+import com.ilumusecase.server.resources.TableDTO;
 import com.ilumusecase.server.resources.TableDetails;
 import com.ilumusecase.server.resources.players.BotPlayerDTO;
 import com.ilumusecase.server.resources.players.ClientPlayerDTO;
@@ -26,7 +26,7 @@ public class TableController {
     
 
     @GetMapping("/tables")
-    public List<Table> retrieveTables(
+    public List<TableDTO> retrieveTables(
         @RequestParam(name="query", required=false, defaultValue = "%") String query,
         @RequestParam(name="authorUsernames", required=false, defaultValue = "%") List<String> authorUsernames,
         @RequestParam(name="categories", required=false, defaultValue = "%") List<String> categories,
@@ -47,13 +47,13 @@ public class TableController {
 
 
     @GetMapping("/tables/{tableId}")
-    public Table retrieveTableById(@PathVariable("tableId") Long tableId){
+    public TableDTO retrieveTableById(@PathVariable("tableId") Long tableId){
         return databaseInterface.getTableDatabase().findById(tableId);
     }
 
     @PostMapping("/tables")
-    public Table createTable(@RequestBody TableDetails tableDetails){
-        Table table = new Table();
+    public TableDTO createTable(@RequestBody TableDetails tableDetails){
+        TableDTO table = new TableDTO();
         table.setBlindSize(tableDetails.getBlindSize());
         table.setCategory(databaseInterface.getCategoriesDatabase().retrieveCategoryById(tableDetails.getCategory()));
         table.setAdmin(databaseInterface.getClientDatabase().findById(tableDetails.getAdminUsername()));
@@ -68,8 +68,8 @@ public class TableController {
     }
 
     @PutMapping("/tables/{tableId}/add/player/{pos}/client/{username}")
-    public Table addClient(@PathVariable("tableId") Long tableId, @PathVariable("pos") Integer pos, @PathVariable("username") String username){
-        Table table = databaseInterface.getTableDatabase().findById(tableId);
+    public TableDTO addClient(@PathVariable("tableId") Long tableId, @PathVariable("pos") Integer pos, @PathVariable("username") String username){
+        TableDTO table = databaseInterface.getTableDatabase().findById(tableId);
         if(pos >= table.getCategory().getMaxPlayers()) throw new RuntimeException();
         if(table.getPlayers().containsKey(pos)) throw new RuntimeException();
         
@@ -84,8 +84,8 @@ public class TableController {
     }
 
     @PutMapping("/tables/{tableId}/remove/player/{pos}")
-    public Table removeClient(@PathVariable("tableId") Long tableId, @PathVariable("pos") Integer pos){
-        Table table = databaseInterface.getTableDatabase().findById(tableId);
+    public TableDTO removeClient(@PathVariable("tableId") Long tableId, @PathVariable("pos") Integer pos){
+        TableDTO table = databaseInterface.getTableDatabase().findById(tableId);
         if(pos >= table.getCategory().getMaxPlayers()) throw new RuntimeException();
         if(!table.getPlayers().containsKey(pos)) throw new RuntimeException();
 
@@ -95,8 +95,8 @@ public class TableController {
     }
 
     @PutMapping("/tables/{tableId}/add/player/{pos}/bot/{strategy}")
-    public Table addBot(@PathVariable("tableId") Long tableId, @PathVariable("pos") Integer pos, @PathVariable("strategy") String strategy){
-        Table table = databaseInterface.getTableDatabase().findById(tableId);
+    public TableDTO addBot(@PathVariable("tableId") Long tableId, @PathVariable("pos") Integer pos, @PathVariable("strategy") String strategy){
+        TableDTO table = databaseInterface.getTableDatabase().findById(tableId);
         if(pos >= table.getCategory().getMaxPlayers()) throw new RuntimeException();
         if(table.getPlayers().containsKey(pos)) throw new RuntimeException();
 

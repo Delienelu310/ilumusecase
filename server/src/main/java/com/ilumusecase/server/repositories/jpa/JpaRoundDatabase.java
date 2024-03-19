@@ -1,17 +1,17 @@
 package com.ilumusecase.server.repositories.jpa;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.ilumusecase.server.repositories.interfaces.RoundDatabaseInterface;
 import com.ilumusecase.server.repositories.jpa.jpa_repositories.RoundJpaRepository;
 import com.ilumusecase.server.resources.RoundDTO;
 
-import lombok.Data;
 
 @Repository
-@Data
 public class JpaRoundDatabase implements RoundDatabaseInterface{
 
+    @Autowired
     private RoundJpaRepository roundJpaRepository;
 
     @Override

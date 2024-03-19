@@ -1,4 +1,4 @@
-
+import { apiClient } from "../api/ApiClient";
 
 export function register({username, password}, {logout}){
 

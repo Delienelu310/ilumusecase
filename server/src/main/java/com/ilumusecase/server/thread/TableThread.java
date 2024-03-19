@@ -18,7 +18,7 @@ import com.ilumusecase.server.repositories.interfaces.DatabaseInterface;
 import com.ilumusecase.server.resources.ActionDTO;
 import com.ilumusecase.server.resources.PlayerDTO;
 import com.ilumusecase.server.resources.RoundDTO;
-import com.ilumusecase.server.resources.Table;
+import com.ilumusecase.server.resources.TableDTO;
 import com.ilumusecase.server.sockets.TableSocketController;
 
 import lombok.Data;
@@ -74,7 +74,7 @@ public class TableThread {
     }
     
     @Async
-    public void launchGame(Table table){
+    public void launchGame(TableDTO table){
 
         // plan
         //1. start the game

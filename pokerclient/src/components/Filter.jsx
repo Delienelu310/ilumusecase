@@ -26,11 +26,11 @@ export default function Filter({filterSet, sendRequest}){
             {filterSet.map((filterPoint, index) => (
                 <div key={`filterPoint_${index}`} className="m-1">
                     {filterPoint.label}
-                    {type == "single-input" ? 
+                    {filterPoint.type == "single-input" ? 
                         <div>
                             <input value={filterPoint.chosenValues} onChange={event => filterPoint.setValues(event.target.value)}/>
                         </div>
-                    : type == "single-select" ?
+                    : filterPoint.type == "single-select" ?
                         <div>
                             <select value={filterPoint.chosenValues} onChange={event => filterPoint.setValues(event.target.value)}>
                                 <option value={null}>No value</option>
@@ -39,7 +39,7 @@ export default function Filter({filterSet, sendRequest}){
                                 ))}
                             </select>
                         </div>
-                    : type == "multiple-input" ? 
+                    : filterPoint.type == "multiple-input" ? 
                         <div>
                             <div>
                                 {filterPoint.chosenValues.map((value, index) => (
@@ -57,7 +57,7 @@ export default function Filter({filterSet, sendRequest}){
                                 filterPoint.setValues([...filterPoint.chosenValues, multipleSingle])
                             }}>Add</button>
                         </div>
-                    : type == "multiple-select" ?
+                    : filterPoint.type == "multiple-select" ?
                         <div>
                             <div>
                             <select multiple value={filterPoint.chosenValues} onChange={event => filterPoint.setValues(event.target.value)}>

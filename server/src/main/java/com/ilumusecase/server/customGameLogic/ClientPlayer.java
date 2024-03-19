@@ -8,7 +8,7 @@ import com.ilumusecase.game.Player;
 import com.ilumusecase.game.Round;
 import com.ilumusecase.server.repositories.interfaces.DatabaseInterface;
 import com.ilumusecase.server.resources.Client;
-import com.ilumusecase.server.resources.Table;
+import com.ilumusecase.server.resources.TableDTO;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -29,7 +29,7 @@ public class ClientPlayer implements Player{
 
     @Override
     public Action getAction(Round round) {
-        Table table = null;
+        TableDTO table = null;
         while(table != null && table.getNewAction() != null){
             table = databaseInterface.getTableDatabase().findById(tableId);
             try {

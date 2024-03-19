@@ -61,7 +61,7 @@ export default function TableCanvas({table, size}){
 
       // did the round finished and new did not started?
       // draw cards of the player
-      if(!table.currentRound && !didFold){
+      if(!table.currentRound && !didFold || player.client && player.client.username == username){
         const cardWidth = 10;
         const cardHeight = 20;
   
@@ -72,8 +72,8 @@ export default function TableCanvas({table, size}){
         let yC = y + rectangleHeight;
     
         //draw the cards
-        for(let i = 0; i < player.hand; i++){
-          let [rank, suit] = round.tableCards[i].split("_");
+        for(let i = 0; i < player.hand.length; i++){
+          let [rank, suit] = player.hand[i].split("_");
           let rankSymbol = rankToSymbol(rank);
           let suitColor = suitToColor(suit);
   

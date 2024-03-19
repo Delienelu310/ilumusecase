@@ -11,3 +11,7 @@ export function addBot({tableId, pos, strategy}){
 export function removePlayer({tableId, pos}){
     return apiClient.put(`/tables/${tableId}/remove/player/${pos}`);
 }
+
+export function addAction({tableId, action}){
+    return apiClient.put(`/tables/${tableId}/add/action`, action);
+}

@@ -15,3 +15,15 @@ export function removePlayer({tableId, pos}){
 export function addAction({tableId, action}){
     return apiClient.put(`/tables/${tableId}/add/action`, action);
 }
+
+export function startGame({tableId}){
+    return apiClient.put(`/tables/${tableId}/start`);
+}
+
+export function pauseGame({tableId}){
+    return apiClient.put(`/tables/${tableId}/pause`);
+}
+
+export function continueGame({tableId}){
+    return apiClient.put(`/tables/${tableId}/continue`);
+}

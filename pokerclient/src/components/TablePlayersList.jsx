@@ -66,6 +66,8 @@ export default function TablePlayersList({table, refresh}){
                                 {table.admin && table.admin.username == username && <button className="btn btn-primary" onClick={() => addBotAction(index)}>Add bot</button>}
                             </div>
                         }
+                        {table.admin.username == username && 
+                            <button className="btn btn-danger" onClick={() => removePlayer({tableId: table.id, pos:index})}>X</button>}
                     </div>
                 ))}
             </div>}

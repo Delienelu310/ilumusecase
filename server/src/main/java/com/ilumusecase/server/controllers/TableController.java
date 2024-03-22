@@ -78,6 +78,7 @@ public class TableController {
         Client client = databaseInterface.getClientDatabase().findById(username);
         ClientPlayerDTO clientPlayerDTO = new ClientPlayerDTO();
         clientPlayerDTO.setClient(client);
+        clientPlayerDTO.setTableDTO(table);
 
         table.getPlayers().put(pos, clientPlayerDTO);
         

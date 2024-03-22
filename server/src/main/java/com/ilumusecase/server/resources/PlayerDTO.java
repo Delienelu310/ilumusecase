@@ -1,6 +1,7 @@
 package com.ilumusecase.server.resources;
 
 import java.util.List;
+import java.util.ArrayList;
 
 import com.ilumusecase.game.Player;
 
@@ -23,7 +24,7 @@ public abstract class PlayerDTO {
     private Integer currentBet;
 
     @ElementCollection
-    private List<String> hand;
+    private List<String> hand = new ArrayList<>();
 
     public abstract Player convertToPlayer();
     

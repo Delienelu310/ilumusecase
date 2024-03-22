@@ -1,5 +1,6 @@
 package com.ilumusecase.server.resources;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
@@ -29,18 +30,18 @@ public class RoundDTO {
     private Integer bank;
 
     @OneToMany(cascade = CascadeType.ALL)
-    private List<PlayerDTO> players;
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<PlayerDTO> playersLeft;
+    private List<PlayerDTO> players = new ArrayList<>();
+    @OneToMany
+    private List<PlayerDTO> playersLeft = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL)
-    private List<ActionDTO> actions;
+    private List<ActionDTO> actions = new ArrayList<>();
 
     @ElementCollection
-    private List<String> deck;
+    private List<String> deck = new ArrayList<>();
 
     @ElementCollection
-    private List<String> tableCards;
+    private List<String> tableCards = new ArrayList<>();
 
     public RoundDTO(Round round){
 

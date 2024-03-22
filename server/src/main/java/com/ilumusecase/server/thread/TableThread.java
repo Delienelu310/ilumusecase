@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
@@ -14,6 +17,7 @@ import com.ilumusecase.game.Deck;
 import com.ilumusecase.game.Game;
 import com.ilumusecase.game.Round;
 import com.ilumusecase.game.pokergametypes.PokerGameType;
+import com.ilumusecase.server.ServerApplication;
 import com.ilumusecase.server.repositories.interfaces.DatabaseInterface;
 import com.ilumusecase.server.resources.ActionDTO;
 import com.ilumusecase.server.resources.PlayerDTO;
@@ -21,14 +25,16 @@ import com.ilumusecase.server.resources.RoundDTO;
 import com.ilumusecase.server.resources.TableDTO;
 import com.ilumusecase.server.sockets.TableSocketController;
 
-import lombok.Data;
 
 @Component
-@Data
 public class TableThread {
 
+    @Autowired
     private DatabaseInterface database;
+    @Autowired
     private TableSocketController tableSocketController;
+
+    private Logger logger = LoggerFactory.getLogger(ServerApplication.class);
 
     private void recordRound(RoundDTO roundDTO, Round round){
         roundDTO.setBank(round.getBank());
@@ -47,13 +53,16 @@ public class TableThread {
         }
         roundDTO.setTableCards(tableCards);
 
-        
+        logger.info("4");
         for(Integer i = 0; i < round.getPlayers().size(); i++){
             PlayerDTO playerDTO = roundDTO.getPlayers().get(i);
             Player player = round.getPlayers().get(i);
+            
             recordPlayer(playerDTO, player);
 
-            if(!round.getPlayersLeft().contains(player)) roundDTO.getPlayersLeft().remove(playerDTO);
+            if(!round.getPlayersLeft().contains(player)){
+                roundDTO.setPlayersLeft(roundDTO.getPlayersLeft().stream().filter(pl -> pl.getId() != playerDTO.getId()).toList());
+            }
         }
 
         for(Integer i = roundDTO.getActions().size(); i < round.getActions().size(); i++){
@@ -72,6 +81,7 @@ public class TableThread {
         playerDTO.setCurrentBet(player.getCurrentBet());
         playerDTO.setHand(player.getPokerHand().stream().map(card -> card.getRank() + "_" + card.getSuit()).toList());
     }
+
     
     @Async
     public void launchGame(TableDTO table){
@@ -145,6 +155,8 @@ public class TableThread {
         roundDTO.setPlayers(playerDTOs);
         roundDTO.setPlayersLeft(playerDTOs);
         table.setCurrentRound(roundDTO);
+
+
         
         Round round = table.getCurrentRound().convertToRound();
 
@@ -165,6 +177,7 @@ public class TableThread {
 
 
         while( !pokerGameType.getPokerGameIsFinishedMethod().run(round) ){
+            logger.info("Thread loop againg");
             if(table.getIsPaused()) continue;
             table.setCurrentPlayerPosition(round.getPlayers().indexOf(pokerGameType.getPokerGameGetCurrentPlayerMethod().run(round)));
             game.addAction(round);

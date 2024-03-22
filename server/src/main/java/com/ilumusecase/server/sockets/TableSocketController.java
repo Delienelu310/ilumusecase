@@ -5,6 +5,7 @@ import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ilumusecase.server.repositories.interfaces.DatabaseInterface;
@@ -18,9 +19,11 @@ public class TableSocketController {
 
     @MessageMapping("/{table_id}/refresh")
     @SendTo("/table/{table_id}")
+    @Transactional
     public String refresh(@DestinationVariable("table_id") Long tableId){
         
         TableDTO table = database.getTableDatabase().findById(tableId);
+        table.getPlayers();
 
         ObjectMapper objectMapper = new ObjectMapper();
         // objectMapper.setFilterProvider(filterProvider);

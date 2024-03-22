@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { addBot, sitTheTable, removePlayer } from "../api/tableManagementApi";
+import { addBot, sitTheTable, removePlayer, startGame } from "../api/tableManagementApi";
 import { useAuth } from "../authentication/AuthContext";
 
 import { retrieveStrategies } from "../api/tableApi";
@@ -8,12 +8,12 @@ export default function TablePlayersList({table, refresh}){
 
     const {username, isAuthorised} = useAuth();
 
-    const [strategyChosen ,setStrategyChosen] = useState();
-    const [strategies, setStrategies] = useState();
+    const [strategyChosen ,setStrategyChosen] = useState("");
+    const [strategies, setStrategies] = useState([]);
 
 
     function sitTheTableAction(position){
-        sitTheTable({tableId: table.id, username, position})
+        sitTheTable({tableId: table.id, username, pos: position})
             .then(response => {
                 refresh();
             }).catch(error => {
@@ -30,44 +30,76 @@ export default function TablePlayersList({table, refresh}){
             });
     }
 
+    function removePlayerAction(position){
+        removePlayer({tableId: table.id, pos:position})
+            .then(response => {
+                refresh();
+            }).catch(error => {
+                console.log(error);
+            });
+    }
+
     useEffect(() => {
         retrieveStrategies({categories: [table.category.category], pageNumber: 0, pageSize: 10})
             .then(response => {
+                console.log(response.data);
                 setStrategies(response.data);
             }).catch(e => console.log(e));
     }, []);
 
+    useEffect(() => {
+
+    }, [strategies]);
+
     return (
-        <div>
+        <div style={{width: "50%"}}>
             {table && <div>
+
+                <h6>Bot:</h6>
+
                 {table.admin && table.admin.username == username && <div>
-                    <input value={strategyChosen} onChange={event => setStrategyChosen(event.target.value)}/>
-                    <select value={strategyChosen} onChange={event => setStrategyChosen(event.target.value)}>
-                        {strategies.map((val, i) => (
-                            <option key={`option_${i}`} value={val}>{val}</option>
+                    <span>By name:</span>
+                    <input className="m-2 form-control" style={{width: "75%"}}
+                        value={strategyChosen} onChange={event => setStrategyChosen(event.target.value)}
+                    />
+                    <span>From list:</span>
+                    <select className="m-2 form-control" style={{width: "75%"}} 
+                        value={strategyChosen} onChange={event => {
+                            setStrategyChosen(event.target.value);
+                            console.log(event.target.value);
+                        }}
+                    >
+                        <option value={""}>None</option>
+                        {strategies && strategies.map((val, i) => (
+                            <option key={`option_${i}`} value={val.strategy}>{val.strategy}</option>
                         ))}
                     </select> 
                 </div>}
 
-                {new Array(table.category.maxPlayers).map((el, index) => (
-                    <div key={"player_" + index}>
+                {new Array(table.category.maxPlayers).fill(1).map((el, index) => (
+                    <div className="m-2" key={"player_" + index}>
                         {table.players[index] ? 
                             <div>
                                 {table.players[index].client && <div>
-                                    Player: {table.players[index].client.username}
+                                    {index + 1}. Player: {table.players[index].client.username}
                                 </div>}
                                 {table.players[index].botStrategy && <div>
-                                    Bot {table.players[index].id} - {table.players[index].botStrategy.strategy}    
+                                    {index + 1}. Bot {table.players[index].id} - {table.players[index].botStrategy.strategy}    
                                 </div>}
                             </div> 
                             : 
                             <div>
-                                {isAuthorised && <button className="btn btn-success" onClick={() => sitTheTableAction(index)}>Sit here</button>}
-                                {table.admin && table.admin.username == username && <button className="btn btn-primary" onClick={() => addBotAction(index)}>Add bot</button>}
+                                {index + 1}. Empty
+                                {isAuthorised && <button className="m-2 btn btn-success" onClick={() => sitTheTableAction(index)}>Sit here</button>}
+                                {table.admin && table.admin.username == username && 
+                                    <button className="m-2 btn btn-primary" onClick={() => addBotAction(index)}>Add bot</button>
+                                }
                             </div>
                         }
-                        {table.admin.username == username && 
-                            <button className="btn btn-danger" onClick={() => removePlayer({tableId: table.id, pos:index})}>X</button>}
+                        {table.players[index] && table.admin.username == username && <button 
+                            className="m-2 btn btn-danger" onClick={() => removePlayerAction(index)}
+                        >X</button>}
+                        <hr/>
                     </div>
                 ))}
             </div>}

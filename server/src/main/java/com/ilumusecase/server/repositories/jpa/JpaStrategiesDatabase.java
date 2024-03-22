@@ -22,6 +22,7 @@ public class JpaStrategiesDatabase implements StrategiesDatabaseInterface{
     public List<BotStrategy> retrieveStrategies(String query, List<String> category, List<String> authors,
         Integer pageNumber, Integer pageSize
     ) {
+        query += "%";
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
         return strategiesJpaRepository.retrieveStrategies(query, category, authors, pageable);
 
@@ -29,6 +30,7 @@ public class JpaStrategiesDatabase implements StrategiesDatabaseInterface{
 
     @Override
     public Long retrieveStrategiesCount(String query, List<String> category, List<String> authors) {
+        query += "%";
         return strategiesJpaRepository.retrieveStrategiesCount(query, category, authors);
     }
 

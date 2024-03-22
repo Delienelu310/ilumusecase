@@ -195,6 +195,7 @@ export default function TableCanvas({table, size}){
     
     return (
         <div>
+          Something
             <canvas ref={canvasRef} width={size * 2} height={size}/>
         </div>
     );

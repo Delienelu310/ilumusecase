@@ -21,7 +21,7 @@ public class TableGameManagementController {
     @Autowired
     private TableThread tableThread;
 
-    @PutMapping("/tables/{talbe_id}/start")
+    @PutMapping("/tables/{table_id}/start")
     @SendTo("/tables/{table_id}")
     public void startRound(@PathVariable("table_id") Long tableId){
 

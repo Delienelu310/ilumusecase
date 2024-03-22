@@ -34,8 +34,8 @@ public class TableDTO {
 
 
     //changable data
-    // @OneToMany(cascade = CascadeType.ALL)
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
+    // @OneToMany
     private Map<Integer, PlayerDTO> players = new HashMap<>();
     
     @OneToOne

@@ -10,8 +10,20 @@ import org.springframework.data.repository.query.Param;
 import com.ilumusecase.server.resources.BotStrategy;
 
 public interface StrategiesJpaRepository extends JpaRepository<BotStrategy, String>{
+
+    final String selectQuery = """
+        SELECT b FROM BotStrategy b WHERE b.strategy LIKE :query 
+            AND ('%' IN :categories OR b.category IN :categories)
+            AND ('%' IN :authors OR b.author IN :authors)
+    """;
+
+    final String countQuery = """
+        SELECT COUNT(b) FROM BotStrategy b WHERE b.strategy LIKE :query
+            AND ('%' IN :categories OR b.category IN :categories)
+            AND ('%' IN :authors OR b.author IN :authors)   
+    """;
     
-    @Query("SELECT b FROM BotStrategy b WHERE b.strategy LIKE ':query%' AND b.category IN :categories AND b.author IN :authors")
+    @Query(selectQuery)
     public List<BotStrategy> retrieveStrategies(
         @Param("query") String query,
         @Param("categories") List<String> categories,
@@ -19,7 +31,7 @@ public interface StrategiesJpaRepository extends JpaRepository<BotStrategy, Stri
         Pageable pageable
     );
 
-    @Query("SELECT COUNT(b) FROM BotStrategy b WHERE b.strategy LIKE ':query%' AND b.category IN :categories AND b.author IN :authors")
+    @Query(countQuery)
     public Long retrieveStrategiesCount(
         @Param("query") String query,
         @Param("categories") List<String> categories,

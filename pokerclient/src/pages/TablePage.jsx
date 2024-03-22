@@ -12,6 +12,7 @@ import TableCanvas from "../components/TableCanvas";
 export default function TablePage(){
 
     const {tableId} = useParams();
+    const {username} = useAuth();
     const [table, setTable] = useState();
 
     const [socketClient, setSocketClient] = useState();
@@ -37,6 +38,10 @@ export default function TablePage(){
         setSocketClient(client);
     }, []);
 
+    useEffect(() => {
+        console.log(table);
+    }, [table]);
+
     return (
         <div>
             {table && <div>
@@ -58,16 +63,16 @@ export default function TablePage(){
                 </div>
                 
                 {/* 2. the table - an oval or an rectange with certain number of squares on it  */}
-                {/* <TableCanvas table={table}/> */}
+                <TableCanvas table={table} size={500}/>
 
                 {/* 3. player panel */}
-                {/* {table.currentRound && <TablePlayerConsole/>} */}
+                {table.currentRound && <TablePlayerConsole/>}
 
                 {/* 4. player list panel */}
-                {/* <TablePlayersList table={table}/> */}
+                <TablePlayersList table={table} refresh={refresh}/>
 
                 {/* 5. admin console */}
-                {/* {table.admin && table.admin.username == username && <TableAdminConsole table={table}/>} */}
+                {table.admin && table.admin.username == username && <TableAdminConsole table={table}/>}
             </div>}
 
             <button className="btn btn-primary m-2" onClick={() => refresh()}>refresh</button>

@@ -104,6 +104,11 @@ public class TableThread {
         game.setPokerGameType(pokerGameType);
 
         //1.c
+        if(table.getCurrentSmallBlind() == null){
+            table.setCurrentSmallBlind(table.getPlayers().keySet().stream().findAny().get());
+        }
+        
+
         RoundDTO roundDTO = new RoundDTO();
         roundDTO.setBank(0);
         roundDTO.setBlindSize(table.getBlindSize());
@@ -139,7 +144,8 @@ public class TableThread {
 
         roundDTO.setPlayers(playerDTOs);
         roundDTO.setPlayersLeft(playerDTOs);
-
+        table.setCurrentRound(roundDTO);
+        
         Round round = table.getCurrentRound().convertToRound();
 
 

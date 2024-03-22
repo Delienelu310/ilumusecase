@@ -24,7 +24,7 @@ public class StrategiesController {
     
     @GetMapping("/strategies")
     public List<BotStrategy> retrieveStrategies(
-        @RequestParam(name="query", required=false, defaultValue = "%") String query,
+        @RequestParam(name="query", required=false, defaultValue = "") String query,
         @RequestParam(name="authors", required=false, defaultValue = "%") List<String> authors,
         @RequestParam(name="categories", required=false, defaultValue = "%") List<String> categories,
         @RequestParam(name="pageSize", required = false, defaultValue = "10") Integer pageSize, 

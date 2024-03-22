@@ -20,7 +20,7 @@ public class StrategiesDatabaseInitializer implements CommandLineRunner{
         botStrategy.setAuthor("admin");
         botStrategy.setCategory("Holdem6");
         botStrategy.setFullClassName("com.ilumusecase.bot.TightAgressiveStrategy");
-        botStrategy.setStrategy("Holdem6: tight-aggressive-easy");
+        botStrategy.setStrategy("Holdem6-tight-aggressive-easy");
         
         databaseInterface.getStrategiesDatabaseInterface().createStrategy(botStrategy);
     }

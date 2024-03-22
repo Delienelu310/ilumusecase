@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "../authentication/AuthContext";
 import { createTable, retrieveCategories } from "../api/tableApi";
 import { useNavigate } from "react-router-dom";

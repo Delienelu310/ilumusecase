@@ -1,5 +1,6 @@
 package com.ilumusecase.server.controllers;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -11,13 +12,13 @@ import com.ilumusecase.server.resources.ActionDTO;
 import com.ilumusecase.server.resources.TableDTO;
 import com.ilumusecase.server.thread.TableThread;
 
-import lombok.Data;
 
 @RestController
-@Data
 public class TableGameManagementController {
     
+    @Autowired
     private DatabaseInterface database;
+    @Autowired
     private TableThread tableThread;
 
     @PutMapping("/tables/{talbe_id}/start")

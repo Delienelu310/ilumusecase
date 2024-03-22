@@ -10,6 +10,7 @@ import com.ilumusecase.server.resources.TableDetails;
 import com.ilumusecase.server.resources.players.BotPlayerDTO;
 import com.ilumusecase.server.resources.players.ClientPlayerDTO;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RestController
 public class TableController {
 
+    @Autowired
     DatabaseInterface databaseInterface;
     
 

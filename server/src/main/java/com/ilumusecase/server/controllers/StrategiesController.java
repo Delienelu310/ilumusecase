@@ -5,6 +5,7 @@ import java.util.List;
 import com.ilumusecase.server.repositories.interfaces.DatabaseInterface;
 import com.ilumusecase.server.resources.BotStrategy;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,12 +15,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import lombok.Data;
 
 @RestController
-@Data
 public class StrategiesController {
 
+    @Autowired
     private DatabaseInterface database;
     
     @GetMapping("/strategies")

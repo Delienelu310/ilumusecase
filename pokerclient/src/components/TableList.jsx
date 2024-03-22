@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { retrieveTables, retrieveTablesCount } from "../api/tableApi";
 
@@ -47,10 +47,15 @@ export default function TableList({allCategories}){
             });
     }
 
+    useEffect(() => {
+        sendRequest();
+    }, [])
+
     return (
         <div>
+            <h4>Enter table using list:</h4>
             <SearchBar query={query} setQuery={setQuery} sendRequest={sendRequest}/>
-            <Filter filterSet={[
+            <Filter sendRequest={sendRequest} filterSet={[
                 {
                     type: "multiple-select",
                     label: "Categories",

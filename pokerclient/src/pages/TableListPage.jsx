@@ -18,6 +18,7 @@ export default function TableListPage(){
     return (
         <div>
             <TableEnterComponent/>
+            <hr/>
             <TableList allCategories={categories}/>
         </div>
     );

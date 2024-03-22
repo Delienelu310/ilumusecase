@@ -12,8 +12,11 @@ export default function TableEnterComponent(){
     }
 
     return (
-        <div>
-            <input value={id} onChange={event => setId(event.target.value)}/>
+        <div style={{
+            width: "50%"
+        }}>
+            <h4>Enter table using id:</h4>
+            <input style={{display: "inline-block", width: "50%"}} className="m-2 form-control" value={id} onChange={event => setId(event.target.value)}/>
             <button className="btn btn-primary" onClick={e => enterTable()}>Enter</button>
         </div>
     );

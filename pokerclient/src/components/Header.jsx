@@ -13,6 +13,7 @@ export function Header(){
             {isAuthorised ?
                 
                 <>
+                    <Link className="m-2" to="/tables/create">Create table</Link>
                     <button className="m-2" onClick={e => {
                         logout();
                         navigate("/");

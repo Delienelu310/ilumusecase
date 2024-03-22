@@ -9,7 +9,7 @@ export default function connectTableSocket(tableId, setTable){
     client.connect({}, async () => {
 
         console.log('Connected');
-        client.subscribe(`/tables/${tableId}`, (table) => {
+        client.subscribe(`/table/${tableId}`, (table) => {
             console.log(JSON.parse(table.body));
             setTable(JSON.parse(table.body));
         });
@@ -28,18 +28,7 @@ export default function connectTableSocket(tableId, setTable){
         console.error('Additional details: ' + frame.body);
     };
 
-    const disconnect = () => {
-        client.disconnect();
-        console.log('Disconnected');
-    }
-
-    const refreshRoomForAll = () => {
-        console.log("REFRESHING ALL");
-        client.send( `/tables/${tableId}/refresh`,  {},  "{}");
-    }
-
-
-    return {disconnect, refreshRoomForAll};
+    return client;
 };
 
 

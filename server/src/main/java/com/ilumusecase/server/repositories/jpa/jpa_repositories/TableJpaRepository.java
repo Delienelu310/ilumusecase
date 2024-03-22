@@ -11,7 +11,31 @@ import java.util.List;
 
 public interface TableJpaRepository extends JpaRepository<TableDTO, Long> {
     
-    @Query("SELECT t FROM TableDTO t WHERE t.name=:query AND t.admin.username IN :authorUsernames AND t.category.category IN :categories")
+    // final String selectQuery = """
+    //     SELECT t FROM TableDTO t WHERE t.name LIKE ':query%' 
+    //         AND (:authorUsernames) IS EMPTY  OR t.admin.username IN (:authorUsernames)
+    //         AND (:categories) IS EMPTY OR t.category.category IN (:categories)
+    // """;
+
+    // final String countQuery = """
+    //     SELECT COUNT(t) FROM TableDTO t WHERE t.name LIKE ':query%' 
+    //         AND (:authorUsernames) IS EMPTY  OR t.admin.username IN (:authorUsernames)
+    //         AND (:categories) IS EMPTY OR t.category.category IN (:categories)  
+    // """;
+
+    final String selectQuery = """
+        SELECT t FROM TableDTO t WHERE t.name LIKE :query  
+            AND  ('%' IN :authorUsernames  OR t.admin.username IN (:authorUsernames))
+            AND  ('%' IN :categories  OR t.category.category IN (:categories))
+    """;
+
+    final String countQuery = """
+        SELECT COUNT(t) FROM TableDTO t WHERE t.name LIKE :query 
+            AND  ('%' IN :authorUsernames  OR t.admin.username IN (:authorUsernames))
+            AND  ('%' IN :categories  OR t.category.category IN (:categories))
+    """;
+
+    @Query(selectQuery)
     public List<TableDTO> retrieveTables(
         @Param("query") String query, 
         @Param("authorUsernames") List<String> authorUsername, 
@@ -19,7 +43,7 @@ public interface TableJpaRepository extends JpaRepository<TableDTO, Long> {
         Pageable pageable
     );
 
-    @Query("SELECT COUNT(t) FROM TableDTO t WHERE t.name=:query AND t.admin.username IN :authorUsernames AND t.category.category IN :categories")
+    @Query(countQuery)
     public Long retrieveTablesNumber(
         @Param("query") String query, 
         @Param("authorUsernames") List<String> authorUsername, 

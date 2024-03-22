@@ -11,18 +11,30 @@ import TableCanvas from "../components/TableCanvas";
 
 export default function TablePage(){
 
-    const {username, isAuthorised} = useAuth();
     const {tableId} = useParams();
     const [table, setTable] = useState();
 
-    const [refresh, setRefresh] = useState();
-    const [disconnect, setDisconnect] = useState();
+    const [socketClient, setSocketClient] = useState();
+
     const navigate = useNavigate();
 
+    function refresh(){
+        if(!socketClient) return;
+
+        console.log("REFRESHING ALL");
+        socketClient.send( `/table/${tableId}/refresh`,  {},  "{}");
+    }
+
+    function disconnect(){
+        if(!socketClient) return; 
+
+        socketClient.disconnect();
+        console.log('Disconnected');
+    }
+
     useEffect(() => {
-        const data = connectTableSocket(tableId, setTable);
-        setRefresh(data.refreshRoomForAll);
-        setDisconnect(data.disconnect);
+        const client = connectTableSocket(tableId, setTable);
+        setSocketClient(client);
     }, []);
 
     return (
@@ -46,17 +58,19 @@ export default function TablePage(){
                 </div>
                 
                 {/* 2. the table - an oval or an rectange with certain number of squares on it  */}
-                <TableCanvas table={table}/>
+                {/* <TableCanvas table={table}/> */}
 
                 {/* 3. player panel */}
-                {table.currentRound && <TablePlayerConsole/>}
+                {/* {table.currentRound && <TablePlayerConsole/>} */}
 
                 {/* 4. player list panel */}
-                <TablePlayersList table={table}/>
+                {/* <TablePlayersList table={table}/> */}
 
                 {/* 5. admin console */}
-                {table.admin && table.admin.username == username && <TableAdminConsole table={table}/>}
+                {/* {table.admin && table.admin.username == username && <TableAdminConsole table={table}/>} */}
             </div>}
+
+            <button className="btn btn-primary m-2" onClick={() => refresh()}>refresh</button>
             
             <button className="btn btn-danger m-3" onClick={() => {
                 disconnect();

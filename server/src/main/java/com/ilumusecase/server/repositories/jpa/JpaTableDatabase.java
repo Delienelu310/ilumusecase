@@ -3,10 +3,13 @@ package com.ilumusecase.server.repositories.jpa;
 import java.util.List;
 
 import org.springframework.data.domain.Pageable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
 
+import com.ilumusecase.server.ServerApplication;
 import com.ilumusecase.server.repositories.interfaces.TableDatabaseInterface;
 import com.ilumusecase.server.repositories.jpa.jpa_repositories.TableJpaRepository;
 import com.ilumusecase.server.resources.TableDTO;
@@ -15,6 +18,8 @@ import com.ilumusecase.server.resources.TableDTO;
 @Repository
 public class JpaTableDatabase implements TableDatabaseInterface  {
 
+    Logger logger = LoggerFactory.getLogger(ServerApplication.class);
+
     @Autowired
     private TableJpaRepository tableJpaRepository;
 
@@ -22,6 +27,8 @@ public class JpaTableDatabase implements TableDatabaseInterface  {
     public List<TableDTO> retrieveTables(String query, List<String> authorUsernames, List<String> categories,
         Integer pageNumber, Integer pageSize
     ){
+
+        query += "%";
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
         return tableJpaRepository.retrieveTables(query, authorUsernames, categories, pageable);
     }
@@ -33,6 +40,7 @@ public class JpaTableDatabase implements TableDatabaseInterface  {
 
     @Override
     public Long retrieveTableCount(String query, List<String> authorUsernames, List<String> categories) {
+        query += "%";
         return tableJpaRepository.retrieveTablesNumber(query, authorUsernames, categories);
     }
 

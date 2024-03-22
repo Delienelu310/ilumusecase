@@ -18,14 +18,13 @@ export default function TableList({allCategories}){
     const [authorUsernames, setAuthorUsernames] = useState([]);
 
 
-    const [itemsNumber, setItemsNumber] = useState();
-    const [pageSize, setPageSize] = useState();
-    const [pageNumber, setPageNumber] = useState();
+    const [itemsNumber, setItemsNumber] = useState(0);
+    const [pageSize, setPageSize] = useState(10);
+    const [pageNumber, setPageNumber] = useState(0);
 
     function getNumberOfTables(){
         return retrieveTablesCount({query, categories, authorUsernames})
             .then(response => {
-                console.log(response);
                 setItemsNumber(response.data);
             })
             .catch(e => {

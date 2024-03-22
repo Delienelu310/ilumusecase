@@ -23,22 +23,25 @@ export function retrieveStrategies({query, authors, categories, pageNumber, page
 
 export function retrieveTables({query, categories, authorUsernames, pageNumber, pageSize}){
 
-    let request = "/tables?"
+    let request = "/tables"
     let params = [];
     if(query) params.push(`query=${query}`);
     if(categories && categories.length > 0) params.push(`categories=${categories.join(",")}`);
     if(authorUsernames && authorUsernames.length > 0) params.push(`authorUsernames=${authorUsernames.join(",")}`);
-    if(pageNumber || pageNumber == 0)params.push(`pageNumber=${pageNumber}`);
-    if(pageSize && pageSize > 0)params.push(`pageSize=${pageSize}`);
+    if(pageNumber || pageNumber == 0) params.push(`pageNumber=${pageNumber}`);
+    if(pageSize && pageSize > 0) params.push(`pageSize=${pageSize}`);
 
     let paramsStr = params.join("&");
 
     if(params.length > 0) request += "?" + paramsStr;
+
+    console.log(request);
+
     return apiClient.get(request);
 }
 
 export function retrieveTablesCount({query, categories, authorUsernames}){
-    let request = "/tables/count?";
+    let request = "/tables/count";
 
     let params = [];
     if(query) params.push(`query=${query}`);

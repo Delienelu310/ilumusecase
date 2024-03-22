@@ -10,6 +10,7 @@ export default function TableListPage(){
     useEffect(() => {
         retrieveCategories()
             .then(response => {
+                console.log(response);
                 setCategories(response.data);
             }).catch(e => console.log(e));
     }, []);

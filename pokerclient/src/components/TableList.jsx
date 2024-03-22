@@ -25,6 +25,7 @@ export default function TableList({allCategories}){
     function getNumberOfTables(){
         return retrieveTablesCount({query, categories, authorUsernames})
             .then(response => {
+                console.log(response);
                 setItemsNumber(response.data);
             })
             .catch(e => {
@@ -38,6 +39,7 @@ export default function TableList({allCategories}){
                 return retrieveTables({query, categories, authorUsernames, pageNumber, pageSize});
             })
             .then(response => {
+                console.log(response);
                 setTables(response.data);
             })
             .catch(e => {

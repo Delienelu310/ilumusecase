@@ -8,9 +8,9 @@ export default function RegisterPage(){
     const {register} = useAuth();
     const navigate = useNavigate();
  
-    const [username, setUsername] = useState();
-    const [password, setPassword] = useState();
-    const [repeatPassword, setRepeatPassword] = useState();
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+    const [repeatPassword, setRepeatPassword] = useState("");
 
     return (
         <div>
@@ -24,10 +24,11 @@ export default function RegisterPage(){
             <input className="form-control" value={repeatPassword} onChange={e => setRepeatPassword(e.target.value)}/>
             <br/>
             <button className="m-2 btn btn-success" onClick={e => {
-                if(password == repeatPassword) register({username, password})
+                if(password == repeatPassword){
+                    register({username, password})
                     .then(r => navigate("/"))
                     .catch(e => console.log(e));
-                else console.log("Passwords must be equal");
+                }else console.log("Passwords must be equal");
             }}>Register</button>
         </div>
     );

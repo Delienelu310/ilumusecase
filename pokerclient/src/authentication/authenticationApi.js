@@ -1,6 +1,6 @@
 import { apiClient } from "../api/ApiClient";
 
-export function register({username, password}, {logout}){
+export function register({username, password}, {setUsername, setAuthorised, logout}){
 
     return apiClient.post(`/register`, {username, password})
         .then(response => {
@@ -8,7 +8,7 @@ export function register({username, password}, {logout}){
                 logout();
                 return false;
             }
-            return login({username, password});
+            return login({username, password}, {setUsername, setAuthorised, logout});
         })
 }
 

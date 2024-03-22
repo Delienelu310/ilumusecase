@@ -1,5 +1,6 @@
 package com.ilumusecase.server.controllers;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -7,12 +8,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ilumusecase.server.repositories.interfaces.DatabaseInterface;
 import com.ilumusecase.server.resources.Client;
 
-import lombok.Data;
 
 @RestController
-@Data
 public class ClientController {
     
+    @Autowired
     private DatabaseInterface database;
 
     @PostMapping("/register")

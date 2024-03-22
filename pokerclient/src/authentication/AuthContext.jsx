@@ -18,7 +18,7 @@ export default function AuthProvider({children}){
     
     return (
         <AuthContext.Provider value={{username, isAuthorised, 
-            register: (clientData) => register(clientData, {logout}),
+            register: (clientData) => register(clientData, {logout, setAuthorised, setUsername}),
             login: (clientData) => login(clientData, {logout, setAuthorised, setUsername}), 
             logout
         }}>

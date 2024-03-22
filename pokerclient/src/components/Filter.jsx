@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function Filter({filterSet, sendRequest}){
 
@@ -18,6 +18,10 @@ export default function Filter({filterSet, sendRequest}){
     const [multipleSingle, setMultipleSingle] = useState("");
 
 
+    useEffect(() => {
+        console.log(filterSet);
+    }, [])
+
     return (
         <div>
 
@@ -30,7 +34,7 @@ export default function Filter({filterSet, sendRequest}){
                         <div>
                             <input value={filterPoint.chosenValues} onChange={event => filterPoint.setValues(event.target.value)}/>
                         </div>
-                    : filterPoint.type == "single-select" ?
+                    : (filterPoint.type == "single-select" ?
                         <div>
                             <select value={filterPoint.chosenValues} onChange={event => filterPoint.setValues(event.target.value)}>
                                 <option value={null}>No value</option>
@@ -39,7 +43,7 @@ export default function Filter({filterSet, sendRequest}){
                                 ))}
                             </select>
                         </div>
-                    : filterPoint.type == "multiple-input" ? 
+                    : (filterPoint.type == "multiple-input" ? 
                         <div>
                             <div>
                                 {filterPoint.chosenValues.map((value, index) => (
@@ -57,17 +61,17 @@ export default function Filter({filterSet, sendRequest}){
                                 filterPoint.setValues([...filterPoint.chosenValues, multipleSingle])
                             }}>Add</button>
                         </div>
-                    : filterPoint.type == "multiple-select" ?
+                    : (filterPoint.type == "multiple-select" ?
                         <div>
                             <div>
-                            <select multiple value={filterPoint.chosenValues} onChange={event => filterPoint.setValues(event.target.value)}>
+                            <select multiple value={filterPoint.chosenValues} onChange={event => filterPoint.setValues([...filterPoint.chosenValues, event.target.value])}>
                                 {filterPoint.allValues.map(val => (
-                                    <option key={`option_${index}`} value={val}>{val}</option>
+                                    <option key={`option_${index}`} value={val}>{val.category}</option>
                                 ))}
                             </select>
                         </div>
                         </div>
-                    : null
+                    : null)))
                     }
                 </div>
             ))}

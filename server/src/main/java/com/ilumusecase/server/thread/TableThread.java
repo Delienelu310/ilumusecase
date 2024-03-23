@@ -33,6 +33,8 @@ public class TableThread {
     private DatabaseInterface database;
     @Autowired
     private TableSocketController tableSocketController;
+    @Autowired
+    private Convertor convertor;
 
     private Logger logger = LoggerFactory.getLogger(ServerApplication.class);
 
@@ -157,8 +159,7 @@ public class TableThread {
         table.setCurrentRound(roundDTO);
 
 
-        
-        Round round = table.getCurrentRound().convertToRound();
+        Round round = convertor.dtoToRound(table.getCurrentRound());
 
 
         //1.d
@@ -168,12 +169,20 @@ public class TableThread {
         recordRound(roundDTO, round);
         database.getRoundDatabase().createRound(roundDTO);
 
+        logger.info("5");
+
         //1.e
         table.setCurrentPlayerPosition(round.getPlayers().indexOf(pokerGameType.getPokerGameGetCurrentPlayerMethod().run(round)));
+        logger.info("5.1");
         table.setIsPaused(false);
         table.setCurrentRound(roundDTO);
 
+        logger.info("5.2");
         tableSocketController.refresh(table.getId());
+        logger.info("5.3");
+
+
+        logger.info("6");
 
 
         while( !pokerGameType.getPokerGameIsFinishedMethod().run(round) ){

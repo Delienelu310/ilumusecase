@@ -3,6 +3,7 @@ package com.ilumusecase.server.resources.players;
 import java.util.List;
 import java.util.ArrayList;
 
+import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ilumusecase.game.Card;
 import com.ilumusecase.game.Player;
@@ -14,12 +15,8 @@ import com.ilumusecase.server.resources.TableDTO;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Entity
-@Data
-@NoArgsConstructor
 public class ClientPlayerDTO extends PlayerDTO{
 
     @ManyToOne
@@ -27,29 +24,26 @@ public class ClientPlayerDTO extends PlayerDTO{
 
     @JsonIgnore
     @ManyToOne
+    @JsonFilter("ClietnPlayer_table")
     private TableDTO tableDTO;
  
-    @Override
-    public Player convertToPlayer() {
-        ClientPlayer clientPlayer = new ClientPlayer();
-        clientPlayer.setBankroll(this.getBankroll());
-        clientPlayer.setCurrentBet(this.getCurrentBet());
+    public ClientPlayerDTO() {
+    }
 
-        List<Card> hand = new ArrayList<>();
+    public Client getClient() {
+        return client;
+    }
 
-        for(String cardRecord : this.getHand()){
-            hand.add(new Card(
-                Integer.parseInt(cardRecord.split("_")[0]),
-                Integer.parseInt(cardRecord.split("_")[1])
-            ));
-        }
-        clientPlayer.setPokerHand(hand);
+    public void setClient(Client client) {
+        this.client = client;
+    }
 
-        clientPlayer.setClient(client);
+    public TableDTO getTableDTO() {
+        return tableDTO;
+    }
 
-        clientPlayer.setTableId(tableDTO.getId());
-
-        return clientPlayer;
+    public void setTableDTO(TableDTO tableDTO) {
+        this.tableDTO = tableDTO;
     }
     
 }

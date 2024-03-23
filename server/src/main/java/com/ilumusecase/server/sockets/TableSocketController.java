@@ -8,6 +8,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ser.FilterProvider;
+import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
+import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import com.ilumusecase.server.repositories.interfaces.DatabaseInterface;
 import com.ilumusecase.server.resources.TableDTO;
 
@@ -26,7 +29,9 @@ public class TableSocketController {
         table.getPlayers();
 
         ObjectMapper objectMapper = new ObjectMapper();
-        // objectMapper.setFilterProvider(filterProvider);
+        FilterProvider filterProvider = new SimpleFilterProvider()
+            .addFilter("ClientPlayer_table", SimpleBeanPropertyFilter.filterOutAllExcept("id"));
+        objectMapper.setFilterProvider(filterProvider);
         
         try{
             return objectMapper.writeValueAsString(table);

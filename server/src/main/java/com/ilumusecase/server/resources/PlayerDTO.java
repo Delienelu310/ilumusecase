@@ -3,7 +3,6 @@ package com.ilumusecase.server.resources;
 import java.util.List;
 import java.util.ArrayList;
 
-import com.ilumusecase.game.Player;
 
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
@@ -26,6 +25,5 @@ public abstract class PlayerDTO {
     @ElementCollection
     private List<String> hand = new ArrayList<>();
 
-    public abstract Player convertToPlayer();
     
 }

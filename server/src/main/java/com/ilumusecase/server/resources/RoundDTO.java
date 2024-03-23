@@ -2,10 +2,6 @@ package com.ilumusecase.server.resources;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Stack;
-
-import com.ilumusecase.game.Card;
-import com.ilumusecase.game.Deck;
 import com.ilumusecase.game.Round;
 
 import jakarta.persistence.CascadeType;
@@ -45,35 +41,6 @@ public class RoundDTO {
 
     public RoundDTO(Round round){
 
-    }
-
-    public Round convertToRound(){
-        Round round = new Round();
-
-        round.setBlindSize(blindSize);
-        round.setBank(bank);
-        round.setPlayers(players.stream().map(playerDTO -> playerDTO.convertToPlayer()).toList());
-        round.setPlayersLeft(playersLeft.stream().map(playerDTO -> playerDTO.convertToPlayer()).toList());
-        round.setTableCards(tableCards.stream().map(card -> new Card(
-            Integer.parseInt(card.split("_")[0]),
-            Integer.parseInt(card.split("_")[1])
-        )).toList());
-        
-        Stack<Card> cards = new Stack<>();
-        for(String card : deck){
-            Integer 
-                suit = Integer.parseInt(card.split("_")[0]),
-                rank = Integer.parseInt(card.split("_")[1]);
-
-            cards.push(new Card(suit, rank));
-        }
-        Deck roundDeck = new Deck();
-        roundDeck.setStack(cards);
-        round.setDeck(roundDeck);
-
-        return round;
-    }
-
-    
+    }    
     
 }

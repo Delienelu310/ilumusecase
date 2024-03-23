@@ -10,6 +10,7 @@ import com.ilumusecase.game.Card;
 import com.ilumusecase.game.Deck;
 import com.ilumusecase.game.Round;
 import com.ilumusecase.server.resources.ActionDTO;
+import com.ilumusecase.server.resources.CardWrapper;
 import com.ilumusecase.server.resources.RoundDTO;
 
 @Component
@@ -28,15 +29,15 @@ public class Convertor {
             return round.getPlayers().get(roundDTO.getPlayers().indexOf(playerDTO));
         }).toList());
         round.setTableCards(roundDTO.getTableCards().stream().map(card -> new Card(
-            Integer.parseInt(card.split("_")[0]),
-            Integer.parseInt(card.split("_")[1])
+            Integer.parseInt(card.getValue().split("_")[0]),
+            Integer.parseInt(card.getValue().split("_")[1])
         )).toList());
         
         Stack<Card> cards = new Stack<>();
-        for(String card : roundDTO.getDeck()){
+        for(CardWrapper card : roundDTO.getDeck()){
             Integer 
-                suit = Integer.parseInt(card.split("_")[0]),
-                rank = Integer.parseInt(card.split("_")[1]);
+                suit = Integer.parseInt(card.getValue().split("_")[0]),
+                rank = Integer.parseInt(card.getValue().split("_")[1]);
 
             cards.push(new Card(suit, rank));
         }

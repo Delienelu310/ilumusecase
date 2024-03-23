@@ -14,7 +14,7 @@ export default function TablePlayerConsole({table}){
 
 
     function addActionAct(type){
-        if(!currentPlayer.client || currentPlayer.client != username) return;
+        if(!currentPlayer.client || currentPlayer.client.username != username) return;
 
         let action = {
             actionType: type,

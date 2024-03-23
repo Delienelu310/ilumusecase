@@ -8,11 +8,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ilumusecase.server.ServerApplication;
 import com.ilumusecase.server.repositories.interfaces.TableDatabaseInterface;
 import com.ilumusecase.server.repositories.jpa.jpa_repositories.TableJpaRepository;
 import com.ilumusecase.server.resources.TableDTO;
+
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 
 
 @Repository
@@ -22,6 +26,8 @@ public class JpaTableDatabase implements TableDatabaseInterface  {
 
     @Autowired
     private TableJpaRepository tableJpaRepository;
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @Override
     public List<TableDTO> retrieveTables(String query, List<String> authorUsernames, List<String> categories,
@@ -60,6 +66,12 @@ public class JpaTableDatabase implements TableDatabaseInterface  {
             throw new RuntimeException();
         table.setId(id);
         return tableJpaRepository.save(table);
+    }
+
+    @Override
+    @Transactional
+    public void clearCacheById(Long id) {
+        entityManager.getEntityManagerFactory().getCache().evict(TableDTO.class, id);
     }
 
     

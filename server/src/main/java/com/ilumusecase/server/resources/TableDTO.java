@@ -38,13 +38,11 @@ public class TableDTO {
     // @OneToMany
     private Map<Integer, PlayerDTO> players = new HashMap<>();
     
-    @OneToOne
+    @OneToOne(cascade = CascadeType.PERSIST)
     private RoundDTO currentRound;
     private Integer currentPlayerPosition;
     private Boolean isPaused;
     private Integer currentSmallBlind;
-    @OneToOne
-    private ActionDTO newAction;
 
     @OneToMany
     private List<RoundDTO> playedRounds = new ArrayList<>();

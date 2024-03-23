@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import com.ilumusecase.bot.PlayerBot;
@@ -11,16 +12,18 @@ import com.ilumusecase.bot.PlayerStrategy;
 import com.ilumusecase.game.Card;
 import com.ilumusecase.game.Player;
 import com.ilumusecase.server.customGameLogic.ClientPlayer;
-import com.ilumusecase.server.repositories.interfaces.DatabaseInterface;
 import com.ilumusecase.server.resources.PlayerDTO;
 import com.ilumusecase.server.resources.players.BotPlayerDTO;
 import com.ilumusecase.server.resources.players.ClientPlayerDTO;
 
 @Component
+@Lazy
 public class PlayerConvertor {
 
     @Autowired
-    private DatabaseInterface database;
+    private ClientQueueComponent clientQueueComponent;
+
+
 
     public Player dtoToPlayer(PlayerDTO playerDTO){
 
@@ -80,7 +83,7 @@ public class PlayerConvertor {
         clientPlayer.setClient(playerDTO.getClient());
 
         clientPlayer.setTableId(playerDTO.getTableDTO().getId());
-        clientPlayer.setDatabaseInterface(database);
+        clientPlayer.setClientQueueComponent(clientQueueComponent);
 
         return clientPlayer;
     }

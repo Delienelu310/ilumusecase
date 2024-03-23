@@ -9,6 +9,7 @@ import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -27,17 +28,17 @@ public class RoundDTO {
 
     @OneToMany(cascade = CascadeType.ALL)
     private List<PlayerDTO> players = new ArrayList<>();
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     private List<PlayerDTO> playersLeft = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL)
     private List<ActionDTO> actions = new ArrayList<>();
 
-    @ElementCollection
-    private List<String> deck = new ArrayList<>();
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<CardWrapper> deck = new ArrayList<>();
 
-    @ElementCollection
-    private List<String> tableCards = new ArrayList<>();
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<CardWrapper> tableCards = new ArrayList<>();
 
     public RoundDTO(Round round){
 

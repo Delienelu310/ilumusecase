@@ -1,14 +1,9 @@
 package com.ilumusecase.server.resources.players;
 
-import java.util.List;
-import java.util.ArrayList;
 
 import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.ilumusecase.game.Card;
-import com.ilumusecase.game.Player;
 
-import com.ilumusecase.server.customGameLogic.ClientPlayer;
 import com.ilumusecase.server.resources.Client;
 import com.ilumusecase.server.resources.PlayerDTO;
 import com.ilumusecase.server.resources.TableDTO;

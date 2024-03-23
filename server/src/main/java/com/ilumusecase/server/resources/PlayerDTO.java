@@ -3,7 +3,6 @@ package com.ilumusecase.server.resources;
 import java.util.List;
 import java.util.ArrayList;
 
-
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

@@ -15,4 +15,6 @@ public interface TableDatabaseInterface {
     public TableDTO updateTable(Long id, TableDTO table);
 
     public void deleteById(Long id);
+
+    public void clearCacheById(Long id);
 }

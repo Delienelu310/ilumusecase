@@ -23,7 +23,7 @@ public class JpaDatabase implements DatabaseInterface{
     @Autowired
     private JpaCategoriesDatabase jpaCategoriesDatabase;
     @Autowired
-    private JpaStrategiesDatabase jpaStrategiesDatabase;  
+    private JpaStrategiesDatabase jpaStrategiesDatabase; 
 
     @Override
     public ClientDatabaseInterface getClientDatabase() {

@@ -27,7 +27,7 @@ public class Holdem6GetCurrentPlayerMethod implements PokerGameGetCurrentPlayerM
 
         //B:
         return round.getPlayersLeft().get(
-            (round.getPlayersLeft().indexOf(lastAction.getPlayer()) + 1) % round.getPlayers().size() 
+            (round.getPlayersLeft().indexOf(lastAction.getPlayer()) + 1) % round.getPlayersLeft().size() 
         );
 
     }

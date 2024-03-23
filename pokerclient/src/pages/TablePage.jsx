@@ -66,7 +66,7 @@ export default function TablePage(){
                 <TableCanvas table={table} size={500}/>
 
                 {/* 3. player panel */}
-                {table.currentRound && <TablePlayerConsole/>}
+                {table.currentRound && <TablePlayerConsole table={table}/>}
 
                 {/* 4. player list panel */}
                 <TablePlayersList table={table} refresh={refresh}/>

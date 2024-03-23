@@ -6,10 +6,10 @@ export default function TableCanvas({table, size}){
     const {username} = useAuth();
     const canvasRef = useRef(null);
 
-    function drawTable(){
+    function drawTable(canvas, ctx){
 
-      const canvas = canvasRef.current;
-      const ctx = canvas.getContext('2d');
+      ctx.fillStyle = '#192841';
+      ctx.fillRect(0,0, canvas.width, canvas.height);
   
       ctx.beginPath();
       ctx.fillStyle = 'green';
@@ -20,14 +20,12 @@ export default function TableCanvas({table, size}){
       ctx.stroke();
     }
 
-    function drawPlayerRectangle(player, x, y, rectangleWidth, rectangleHeight){
+    function drawPlayerRectangle(canvas, ctx, player, x, y, rectangleWidth, rectangleHeight){
 
-      const canvas = canvasRef.current;
-      const ctx = canvas.getContext('2d');
-
-      ctx.fillStyle = '#f0f0f0'; 
+      ctx.fillStyle = '#f0f0f0';
       ctx.fillRect(x, y, rectangleWidth, rectangleHeight);
 
+      //drawing player`s title
       let title;
       if(player.client) title = `Player: ${player.client.username}`;
       else if(player.botStrategy) title = `Bot: ${player.id} - ${player.botStrategy.strategy}`;
@@ -36,13 +34,15 @@ export default function TableCanvas({table, size}){
       ctx.textAlign = 'center';
       ctx.fillText(title, x + rectangleWidth / 2, y + rectangleHeight / 2);
 
+      //drawing bankroll and current bet
+      ctx.fillText(player.currentBet, x + rectangleWidth / 2, y + 20);
+      ctx.fillText(player.bankroll, x + rectangleWidth / 2, y + rectangleHeight - 10);
+
       
-      ctx.fillText(player.bankroll, x, y - 10);
-      ctx.fillText(player.currentBet, x, y + rectangleHeight);
 
 
+      //FOLD label
       // did fold?
-
       let round;
       if(table.currentRound) round = table.currentRound;
       else if(table.playedRounds && table.playedRounds.length > 0) round = table.playedRounds[table.playedRounds.length - 1];
@@ -55,17 +55,26 @@ export default function TableCanvas({table, size}){
           break;
         }
       }
+      //if folded, then write
       if(didFold){
         ctx.fillStyle = 'red';
-        ctx.fillText("FOLD", x, y + rectangleHeight - 15);
+        ctx.fillText("FOLD", x + rectangleWidth / 2, y + rectangleHeight - 25);
+      }
+      
+      //is currently moving?
+      let isMoving = table.currentPlayerPosition && round.players[table.currentPlayerPosition].id == player.id;
+      if(isMoving){
+        ctx.fillStyle = 'green';
+        ctx.fillText("Moves", x + rectangleWidth / 2, y + rectangleHeight - 40);
       }
       
 
       // did the round finished and new did not started?
       // draw cards of the player
       if(!table.currentRound && !didFold || player.client && player.client.username == username){
-        const cardWidth = 10;
-        const cardHeight = 20;
+
+        const cardWidth = 30;
+        const cardHeight = 40;
   
         //draw the place for cards 
         const wholeWith = 20 * player.hand.length;
@@ -76,41 +85,41 @@ export default function TableCanvas({table, size}){
         //draw the cards
         for(let i = 0; i < player.hand.length; i++){
           let [rank, suit] = player.hand[i].split("_");
-          let rankSymbol = rankToSymbol(rank);
-          let suitColor = suitToColor(suit);
+          let rankSymbol = rankToSymbol(+rank);
+          let suitColor = suitToColor(+suit);
   
           ctx.fillStyle = '#f0f0f0'; 
-          ctx.fillRect(xC + i * cardWidth, xC, cardWidth, cardHeight);
+          ctx.fillRect(xC + i * cardWidth, yC, cardWidth, cardHeight);
           ctx.strokeStyle = 'brown'; 
-          ctx.strokeRect(yC + i * cardWidth, yC, cardWidth, cardHeight);
+          ctx.strokeRect(xC + i * cardWidth, yC, cardWidth, cardHeight);
   
           ctx.fillStyle = suitColor;
           ctx.font = '14px Arial';
           ctx.textAlign = 'center';
-          ctx.fillText(rankSymbol, x + i * cardWidth + cardWidth / 2, y + cardHeight / 2);
+
+          ctx.fillText(rankSymbol, xC + i * cardWidth + cardWidth / 2, yC + cardHeight / 2);
         }
       }
     }
 
-    function drawAllPlayers(){
+    function drawAllPlayers(canvas, ctx){
 
-      const canvas = canvasRef.current;
-      const ctx = canvas.getContext('2d');
 
       const horizontalRadius = canvas.width / 3;
       const verticalRadius = canvas.height / 3;
 
-      const rectangleWidth = 40;
-      const rectangleHeight = 80;
-      const angleIncrement = (Math.PI * 2) / table.players.length;
+      const rectangleWidth = 100;
+      const rectangleHeight = 120;
+      const angleIncrement = (Math.PI * 2) / table.category.maxPlayers;
 
-      for(let i = 0; i < table.players.length; i++){
+      for(let i = 0; i < table.category.maxPlayers; i++){
+        if(!table.players[i]) continue;
 
         const angle = i * angleIncrement;
         const x = (canvas.width / 2) + Math.cos(angle) * horizontalRadius - rectangleWidth / 2;
         const y = (canvas.height / 2) + Math.sin(angle) * verticalRadius - rectangleHeight / 2; 
 
-        drawPlayerRectangle(table.players[i], x, y, rectangleWidth, rectangleHeight);
+        drawPlayerRectangle(canvas, ctx, table.players[i], x, y, rectangleWidth, rectangleHeight);
       }
     }
 
@@ -142,31 +151,32 @@ export default function TableCanvas({table, size}){
       }
     }
 
-    function drawTableCards(){
+    function drawTableCards(canvas, ctx){
       
       let round;
       if(table.currentRound) round = table.currentRound;
       else if(table.playedRounds && table.playedRounds.length > 0) round = table.playedRounds[table.playedRounds.length - 1];
       else return;
 
-      const canvas = canvasRef.current;
-      const ctx = canvas.getContext('2d');
-
       const cardWidth = 40;
       const cardHeight = 80;
 
       //draw the bank:
+      let x = canvas.width / 2;
+      let y = canvas.width / 2;
+
+
       ctx.fillStyle = 'black';
-      ctx.fillText(round.bank, x + 50 / 2, y - 20 - cardHeight  + 20 / 2 );
+      ctx.fillText(round.bank, x - 50 / 2, y - 20 - cardHeight  + 20 / 2 );
 
       //draw the place for cards 
       const wholeWith = 40 * round.tableCards.length;
 
-      let x = (canvas.width - wholeWith) / 2;
-      let y = (canvas.height - cardHeight) / 2;
+      x = (canvas.width - wholeWith) / 2;
+      y = (canvas.height - cardHeight) / 2;
   
       //draw the cards
-      for(let i = 0; i < round.tableCards; i++){
+      for(let i = 0; i < round.tableCards.length; i++){
         let [rank, suit] = round.tableCards[i].split("_");
         let rankSymbol = rankToSymbol(rank);
         let suitColor = suitToColor(suit);
@@ -184,18 +194,21 @@ export default function TableCanvas({table, size}){
     }
 
     useEffect(() => {
+
+      const canvas = canvasRef.current;
+      const ctx = canvas.getContext('2d');
+
+      ctx.clearRect(0,0,canvas.width, canvas.height);
       
-  
-      drawTable();
-      drawAllPlayers();
-      drawTableCards();
+      drawTable(canvas, ctx);
+      drawAllPlayers(canvas, ctx);
+      drawTableCards(canvas, ctx);
 
     }, [table]);
     
     
     return (
         <div>
-          Something
             <canvas ref={canvasRef} width={size * 2} height={size}/>
         </div>
     );

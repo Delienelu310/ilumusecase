@@ -43,12 +43,12 @@ export default function TablePlayerConsole({table}){
             .catch(e => console.log("Exception"));
     }
 
-  
 
     useEffect(() => {
+
     
         if(table && table.currentRound){
-            setCurrentPlayer(table.currentRound[table.currentPlayerPosition]);
+            setCurrentPlayer(table.currentRound.players[table.currentPlayerPosition]);
 
             //get current biggest bet
             let max = 0;
@@ -62,28 +62,31 @@ export default function TablePlayerConsole({table}){
             setCurrentStake(0);
         }
     }, [table]);
+    useEffect(() => {
+
+    }, [currentPlayer]);
 
     
 
     return (
-        <div>
+        <div style={{width: "50%"}}>
             {table && table.currentRound && <div>
-
                 {/* Panel with actions */}
-                {currentPlayer.client && currentPlayer.client.username == username && <div>
+                {currentPlayer && currentPlayer.client && currentPlayer.client.username == username && <div>
                     <input
+                        className="m-2 form-control"
                         type="range"
                         min={currentStake * 2 > currentPlayer.bankroll ? currentPlayer.bankroll : currentStake * 2}
                         max={currentPlayer.bankroll}
                         value={size}
                         onChange={e => setSize(e.target.value)}
                     /> 
-                    <input value={size} onChange={e => setSize(e.target.value)}/>
-                    <button className="btn btn-success" onClick={() => addActionAct("BET")}>Bet</button>
-                    <button className="btn btn-success" onClick={() => addActionAct("CALL")}>Call</button>
-                    <button className="btn btn-success" onClick={() => addActionAct("CHECK")}>Check</button>
-                    <button className="btn btn-primary" onClick={() => addActionAct("RAISE")}>Raise</button>
-                    <button className="btn btn-danger" onClick={() => addActionAct("FOLD")}>Fold</button>
+                    <input className="m-2 form-control" value={size} onChange={e => setSize(e.target.value)}/>
+                    <button className="m-2 btn btn-success" onClick={() => addActionAct("BET")}>Bet</button>
+                    <button className="m-2 btn btn-success" onClick={() => addActionAct("CALL")}>Call</button>
+                    <button className="m-2 btn btn-success" onClick={() => addActionAct("CHECK")}>Check</button>
+                    <button className="m-2 btn btn-primary" onClick={() => addActionAct("RAISE")}>Raise</button>
+                    <button className="m-2 btn btn-danger" onClick={() => addActionAct("FOLD")}>Fold</button>
                 </div>}
                     
                 

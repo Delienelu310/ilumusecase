@@ -24,7 +24,9 @@ public class Convertor {
         round.setBlindSize(roundDTO.getBlindSize());
         round.setBank(roundDTO.getBank());
         round.setPlayers(roundDTO.getPlayers().stream().map(playerDTO -> playerConvertor.dtoToPlayer(playerDTO)).toList());
-        round.setPlayersLeft(roundDTO.getPlayersLeft().stream().map(playerDTO -> playerConvertor.dtoToPlayer(playerDTO)).toList());
+        round.setPlayersLeft(roundDTO.getPlayersLeft().stream().map(playerDTO -> {
+            return round.getPlayers().get(roundDTO.getPlayers().indexOf(playerDTO));
+        }).toList());
         round.setTableCards(roundDTO.getTableCards().stream().map(card -> new Card(
             Integer.parseInt(card.split("_")[0]),
             Integer.parseInt(card.split("_")[1])

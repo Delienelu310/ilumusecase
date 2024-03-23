@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 
 import com.ilumusecase.game.Player;
 import com.ilumusecase.game.Action;
@@ -24,6 +25,8 @@ import com.ilumusecase.server.resources.PlayerDTO;
 import com.ilumusecase.server.resources.RoundDTO;
 import com.ilumusecase.server.resources.TableDTO;
 import com.ilumusecase.server.sockets.TableSocketController;
+
+
 
 
 @Component
@@ -173,14 +176,10 @@ public class TableThread {
 
         //1.e
         table.setCurrentPlayerPosition(round.getPlayers().indexOf(pokerGameType.getPokerGameGetCurrentPlayerMethod().run(round)));
-        logger.info("5.1");
         table.setIsPaused(false);
         table.setCurrentRound(roundDTO);
 
-        logger.info("5.2");
-        tableSocketController.refresh(table.getId());
-        logger.info("5.3");
-
+        tableSocketController.sendToClient(table.getId());
 
         logger.info("6");
 
@@ -194,7 +193,7 @@ public class TableThread {
             recordRound(roundDTO, round);
             database.getRoundDatabase().updateRound(roundDTO.getId(), roundDTO);
 
-            tableSocketController.refresh(table.getId());
+            tableSocketController.sendToClient(table.getId());
         }
 
         pokerGameType.getPokerGameFinalizeMethod().run(round);
@@ -215,7 +214,7 @@ public class TableThread {
         );
         database.getTableDatabase().updateTable(table.getId(), table);
 
-        tableSocketController.refresh(table.getId());
+        tableSocketController.sendToClient(table.getId());
     }
 
 }

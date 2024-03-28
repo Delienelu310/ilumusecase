@@ -1,26 +1,42 @@
 package com.ilumusecase.random_generator.random_generator;
 
 import com.ilumusecase.game.ActionType;
-import com.ilumusecase.game.Card;
+import com.opencsv.bean.CsvBindAndSplitByName;
+import com.opencsv.bean.CsvBindByName;
+
+import java.util.List;
+import java.util.ArrayList;
 
 import lombok.Data;
 
 @Data
 public class ActionRecord {
 
+    @CsvBindByName
     private Long roundId;
+    @CsvBindByName
     private Integer actionNumber;
+    @CsvBindByName
     private Integer position;
     
-    private Card[] tableCards = new Card[5];
+    
+    @CsvBindAndSplitByName(elementType = List.class, writeDelimiter = ",")
+    private List<String> tableCards = new ArrayList<>();
+    @CsvBindByName
     private Integer bigBlind = 100;
+    @CsvBindByName
     private Integer maxPreviousBetSize;
+    @CsvBindByName
     private Integer playerPreviousBetSize;
+    @CsvBindByName
     private Integer bank;
 
+    @CsvBindByName
     private ActionType actionType;
+    @CsvBindByName
     private Integer actionSize;
-
+    @CsvBindByName
     private Integer bankroll;
-    private Card[] hand = new Card[2];
+    @CsvBindAndSplitByName(elementType = List.class, writeDelimiter = ",")
+    private List<String> hand = new ArrayList<>();
 }

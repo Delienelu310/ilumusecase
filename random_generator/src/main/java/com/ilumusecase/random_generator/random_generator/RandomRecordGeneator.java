@@ -1,5 +1,7 @@
 package com.ilumusecase.random_generator.random_generator;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.Stack;
 
@@ -28,7 +30,7 @@ public class RandomRecordGeneator {
 
         Integer playerBetSize = random.nextDouble() > 0.8 ? betSize : random.nextDouble() > 0.5 ? 0 : (int)(betSize * random.nextDouble(0.2, 0.5));
         actionRecord.setPlayerPreviousBetSize(playerBetSize);
-        
+
         //action type and action size
         switch(random.nextInt(0, 3)){
             case 0:
@@ -60,37 +62,39 @@ public class RandomRecordGeneator {
         Integer stageNumber = (int)(actionRecord.getActionNumber() / random.nextInt(1, 7) / random.nextDouble(0.5, 2));
         if(stageNumber > 3) stageNumber = 3;
 
-        Stack<Card> cards = new Stack<>();
+        Stack<String> cards = new Stack<>();
+
         Integer cardsNumber = 2;
         if(!stageNumber.equals(0)) cardsNumber += 2 + stageNumber;
         
 
         for(int i = 0; i < cardsNumber; i++){
             boolean isUsed = true;
-            Card card = null;
-
+            String cardString = null;
             while(isUsed){
                 isUsed = false;
-                card = new Card(random.nextInt(2, 15), random.nextInt(0, 4));
-                for(Card c : cards){
-                    if(c.getRank().equals(card.getRank()) && c.getSuit().equals(card.getSuit())){
+                
+                Card card = new Card(random.nextInt(2, 15), random.nextInt(0, 4));
+                cardString = card.getRank() + "_" + card.getSuit();
+                for(String c : cards){
+                    if(c.equals(cardString)){
                         isUsed = true;
                         break;
                     }
                 }
             }
-            cards.push(card);
+            cards.push(cardString);
         }
 
-        Card[] hand = new Card[2];
-        hand[0] = cards.pop();
-        hand[1] = cards.pop();
+        List<String> hand = new ArrayList<>();
+        hand.add(cards.pop());
+        hand.add(cards.pop());
         actionRecord.setHand(hand);
         
         
-        Card[] tableCards = new Card[5];
+        List<String> tableCards = new ArrayList<>();
         for(int i = 0; i < cardsNumber - 2; i++){
-            tableCards[i] = cards.pop();
+            tableCards.add(cards.pop());
         }
         actionRecord.setTableCards(tableCards);
 

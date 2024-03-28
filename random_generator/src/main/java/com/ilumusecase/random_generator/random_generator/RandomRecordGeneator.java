@@ -5,9 +5,12 @@ import java.util.List;
 import java.util.Random;
 import java.util.Stack;
 
+import org.springframework.stereotype.Component;
+
 import com.ilumusecase.game.ActionType;
 import com.ilumusecase.game.Card;
 
+@Component
 public class RandomRecordGeneator {
     
     private Random random = new Random();

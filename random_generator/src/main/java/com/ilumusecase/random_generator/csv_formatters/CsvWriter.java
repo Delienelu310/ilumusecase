@@ -3,6 +3,9 @@ package com.ilumusecase.random_generator.csv_formatters;
 import java.io.FileWriter;
 import java.io.Writer;
 import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
@@ -14,7 +17,17 @@ import com.opencsv.bean.StatefulBeanToCsvBuilder;
 
 @Component
 public class CsvWriter {
-    public void writeCsvFromBean(Path path, List<ActionRecord> actionRecordList) throws Exception {
+    public String writeCsvFromBean(String targetPath, String category, List<ActionRecord> actionRecordList) {
+
+        Path path = null;
+		try{
+			path = Paths.get(System.getProperty("user.dir") + targetPath + "/" + category + "_" +
+				LocalDateTime.now().format(DateTimeFormatter.ofPattern("uuuu-MM-dd'T'hh-mm-ss")) + ".csv"
+            );
+		}catch(Exception e){
+			throw new RuntimeException(e);
+		}
+
 
         
         try (Writer writer  = new FileWriter(path.toString())) {
@@ -25,6 +38,10 @@ public class CsvWriter {
                 .build();
 
             sbc.write(actionRecordList);
+        }catch(Exception e){
+            throw new RuntimeException(e);
         }
+
+        return path.toString();
     }
 }

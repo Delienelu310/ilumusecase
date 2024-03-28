@@ -18,6 +18,8 @@ public class ActionRecord {
     private Integer actionNumber;
     @CsvBindByName
     private Integer position;
+    @CsvBindByName
+    private String category;
     
     
     @CsvBindAndSplitByName(elementType = List.class, writeDelimiter = ",")

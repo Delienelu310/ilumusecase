@@ -14,7 +14,7 @@
 	<name>random_generator</name>
 	<description>Generator of random data for data analysis</description>
 	<properties>
-		<java.version>21</java.version>
+		<java.version>17</java.version>
 	</properties>
 	<dependencies>
 		<dependency>

@@ -6,6 +6,13 @@ import java.util.List;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
+
+import org.apache.spark.ml.feature.StringIndexer;
+import org.apache.spark.ml.feature.VectorAssembler;
+import org.apache.spark.ml.regression.LinearRegression;
+import org.apache.spark.ml.regression.LinearRegressionModel;
+import org.apache.spark.ml.feature.OneHotEncoder;
+
 import org.apache.spark.sql.api.java.UDF1;
 import org.apache.spark.sql.api.java.UDF2;
 import org.apache.spark.sql.api.java.UDF4;
@@ -53,11 +60,11 @@ public class Script1
 				switch (actionType) {
 					case "BET":
 					case "RAISE":
-						return bank * 1.0 / actionSize;
+						return Math.round(bank * 100.0 / actionSize) * 1.0 / 100;
 					case "CALL":
 					case "FOLD":
 						if(toCall.equals(0)) return 10.0;
-						return bank * 1.0 / toCall;
+						return Math.round(bank * 100.0 / toCall) * 1.0 / 100;
 					case "CHECK":
 						return 10.0;
 					default:
@@ -96,8 +103,8 @@ public class Script1
 				round.setTableCards(tableCards);
 
 
-				if(tableCards.size() == 5) return calculateRelativePower.calculateRelativePower(round, hand);
-				else return calculateRelativePower.calculateRelativePotentialPower(round, hand);
+				if(tableCards.size() == 5) return Math.round(calculateRelativePower.calculateRelativePower(round, hand) * 1000) * 1.0 / 1000;
+				else return Math.round(calculateRelativePower.calculateRelativePotentialPower(round, hand) * 1000) * 1.0 / 1000;
 
 			}
 
@@ -114,10 +121,57 @@ public class Script1
 			" getRelativePower(tableCards, hand) as relativePower " + 
 			" FROM csvData WHERE getCardsNumber(tableCards) > 2";
 
-		spark
-			.sql(selectStatement)
-			.show(100)
-		;
+		Dataset<Row> cleanData = spark.sql(selectStatement);
+		
+
+				
+		StringIndexer actionTypeIndex = new StringIndexer();
+		actionTypeIndex.setInputCol("actionType");
+		actionTypeIndex.setOutputCol("actionTypeIndex");
+		
+		StringIndexer cardsNumberIndex = new StringIndexer();
+		cardsNumberIndex.setInputCol("cardsNumber");
+		cardsNumberIndex.setOutputCol("cardsNumberIndex");
+
+		cleanData = actionTypeIndex.fit(cleanData).transform(cleanData);
+        cleanData = cardsNumberIndex.fit(cleanData).transform(cleanData);
+
+
+		OneHotEncoder encoder = new OneHotEncoder();
+		encoder.setInputCols(new String[] {"actionTypeIndex","cardsNumberIndex"});
+		encoder.setOutputCols(new String[] {"actionTypeVector","cardsNumberVector"});
+		cleanData = encoder.fit(cleanData).transform(cleanData);
+
+
+				
+		VectorAssembler vectorAssembler = new VectorAssembler()
+				.setInputCols(new String[] {"bankChances","actionTypeVector","cardsNumberVector"})
+				.setOutputCol("features");
+		
+		Dataset<Row> modelInputData = vectorAssembler.transform(cleanData)
+				.select("relativePower","features")
+				.withColumnRenamed("relativePower", "label");
+		
+		// modelInputData.show();
+		
+		Dataset<Row>[] dataSplits = modelInputData.randomSplit(new double[] {0.8, 0.2});
+		Dataset<Row> trainingAndTestData = dataSplits[0];
+		Dataset<Row> holdOutData = dataSplits[1];
+		
+		LinearRegression linearRegression = new LinearRegression(); 
+
+		LinearRegressionModel model = linearRegression.fit(trainingAndTestData);
+			
+		System.out.println("The training data r2 value is " + model.summary().r2() + " and the RMSE is " + model.summary().rootMeanSquaredError());
+		
+		//model.transform(testData).show();
+		
+		System.out.println("The test data r2 value is " + model.evaluate(holdOutData).r2() + " and the RMSE is " + model.evaluate(holdOutData).rootMeanSquaredError());
+		
+		System.out.println("coefficients : " + model.coefficients() + " intercept : " + model.intercept());
+		System.out.println("reg param : " + model.getRegParam() + " elastic net param : " + model.getElasticNetParam());
+		
+
 
 
         spark.close();

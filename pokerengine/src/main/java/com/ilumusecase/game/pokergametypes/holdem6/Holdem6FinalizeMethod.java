@@ -62,14 +62,16 @@ public class Holdem6FinalizeMethod implements PokerGameFinalizeMethod {
         //organise information in a good way:
 
 
-        List<PlayerData> playerDatas = round.getPlayersLeft().stream().map(pl -> {
+        List<PlayerData> playerDatas = new ArrayList<>();
+        round.getPlayersLeft().stream().forEach(pl -> {
             PlayerData playerData = new PlayerData();
             playerData.setPlayer(pl);
             playerData.setHand(compareHandsMethod.findBestHand(round, pl.getPokerHand()));
             playerData.setPower(compareHandsMethod.getHandPower(playerData.getHand()));
             playerData.setRanks(compareHandsMethod.getRanks(playerData.getHand()));
-            return playerData;
-        }).toList();
+
+            playerDatas.add(playerData);
+        });
 
         Map<Player, Integer> moneyGivenToBank = new HashMap<>();
 

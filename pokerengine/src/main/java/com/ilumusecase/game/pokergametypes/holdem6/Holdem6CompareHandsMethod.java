@@ -53,11 +53,14 @@ public class Holdem6CompareHandsMethod implements PokerGameCompareHandsMethod{
 
         Map<Integer, Integer> map = mapTheHand(hand);
         
+        List<Integer> result = new ArrayList<>();
 
-        return hand.stream().map( card -> card.getRank()).sorted((a, b) -> {
+        hand.stream().map( card -> card.getRank()).sorted((a, b) -> {
             if(map.get(a).equals(map.get(b))) return b - a; 
             else return map.get(b) - map.get(a);
-        }).toList();
+        }).forEach(val -> result.add(val));
+
+        return result;
     }
     
     public Integer compareHands(List<Card> hand1, List<Card> hand2){

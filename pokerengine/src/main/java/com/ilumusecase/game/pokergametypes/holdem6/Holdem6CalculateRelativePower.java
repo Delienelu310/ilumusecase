@@ -42,7 +42,7 @@ public class Holdem6CalculateRelativePower {
 
     private void calculateRelativePreflopPowerRecursive(Deck deck, List<Card> cards, int tableCardIndex){
         
-        System.out.println(cards.stream().map(card -> deck.getStack().indexOf(card)).toList());
+        // System.out.println(cards.stream().map(card -> deck.getStack().indexOf(card)).toList());
 
         if(cards.size() == 4){
             for(int i1 = 0; i1 < deck.getStack().size() - 3; i1++){

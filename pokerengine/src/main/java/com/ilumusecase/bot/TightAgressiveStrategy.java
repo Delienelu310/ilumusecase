@@ -204,8 +204,9 @@ public class TightAgressiveStrategy implements PlayerStrategy {
         if(handPower >= 4 && boardPairsNumber < 2) return 5;
         if(handPower >= 2 && boardPairsNumber.equals(0)) return 4;
 
-        Integer highestRank = round.getTableCards().stream().sorted((card1, card2) -> card2.getRank() - card2.getRank()).toList().get(0).getRank();
-        Integer secondHighestRank = round.getTableCards().stream().sorted((card1, card2) -> card2.getRank() - card2.getRank()).toList().get(1).getRank();
+        Card[] ranksTemp = (Card[])round.getTableCards().stream().sorted((card1, card2) -> card2.getRank() - card2.getRank()).toArray();
+        Integer highestRank = ranksTemp[0].getRank();
+        Integer secondHighestRank = ranksTemp[1].getRank();
         
         if(handPower.equals(1) && boardPairsNumber.equals(0) && ranks.get(0) >= highestRank) return 3;
         if(isDrawingHand(round, player)) return 2;
